@@ -33,13 +33,13 @@ public enum Pokedex {
 	
 	
 	private final String name;		// store the name of the pokemon
-	private final int tagIndex;		// store the index of the pokemon in pokedex
+	private final int pokedexIndex;		// store the index of the pokemon in pokedex
 	private final PokemonQuality quality;		// store the quality of the pokemon
 	private final int basicHP;		// store the basic HP of this kind
 	
 	Pokedex(String name, int tag, PokemonQuality q, int hp){
 		this.name = name;
-		this.tagIndex = tag;
+		this.pokedexIndex = tag;
 		this.quality = q;
 		this.basicHP = hp;
 	}
@@ -48,8 +48,8 @@ public enum Pokedex {
 		return this.name;
 	}
 	
-	public int getTagIndex(){
-		return this.tagIndex;
+	public int getIndex(){
+		return this.pokedexIndex;
 	}
 	
 	public PokemonQuality getQuality(){

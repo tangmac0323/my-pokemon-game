@@ -60,7 +60,7 @@ public class Pokemon {
 		this.metDate = LocalDateTime.now();
 		this.pokemonSpecy = specy;
 		this.quality = specy.getQuality();
-		this.randomSeed = specy.getTagIndex();
+		this.randomSeed = specy.getIndex();
 		
 		this.name = name;
 		
