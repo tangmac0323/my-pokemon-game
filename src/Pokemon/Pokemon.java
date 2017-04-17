@@ -33,7 +33,7 @@ import java.util.Random;
  */
 
 
-public class Pokemon {
+public abstract class Pokemon {
 	// fixed data for the pokemon
 	private final LocalDateTime metDate;
 	private final Pokedex pokemonSpecy;
@@ -46,6 +46,7 @@ public class Pokemon {
 	
 	// dynamic information for the pokemon
 	private String name;
+	private String nickName;
 	private int curHP;
 	private double curCapRate;
 	private double curRunChance;
@@ -63,6 +64,7 @@ public class Pokemon {
 		this.randomSeed = specy.getIndex();
 		
 		this.name = name;
+		this.nickName = name;
 		
 		// randomly generate hp
 		this.maxHP = randomHP(specy.getBasicHP());
@@ -176,7 +178,7 @@ public class Pokemon {
 	
 	// setter for the parameter
 	public void setName(String newName){
-		this.name = newName;
+		this.nickName = newName;
 	}
 	
 	public void incrementHP(int incre){
@@ -235,6 +237,10 @@ public class Pokemon {
 		
 	public void setCapTurn(int turn){
 		this.capTurn = turn;
+	}
+	
+	public String getNickName(){
+		return this.nickName;
 	}
 	
 }
