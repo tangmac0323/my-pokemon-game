@@ -1,5 +1,5 @@
 package Inventory;
 
-public class Item {
+public abstract class Item {
 
 }
