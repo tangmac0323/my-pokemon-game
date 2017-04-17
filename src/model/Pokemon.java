@@ -1,5 +1,6 @@
 package model;
 
+//Pokemon general class 
 public class Pokemon {
 	private PokemonType type;
 	private int HP;
