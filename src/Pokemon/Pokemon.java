@@ -196,28 +196,28 @@ public abstract class Pokemon {
 	}
 	
 	public void incrementCapRate(double incre){
-		this.curCapRate += incre;
+		this.curCapRate *= 1 + incre;
 		if(this.curCapRate > 1){
 			this.curCapRate = 1.0;
 		}
 	}
 	
 	public void decrementCapRate(double decre){
-		this.curCapRate -= decre;
+		this.curCapRate *= 1 - decre;
 		if(this.curCapRate < 0){
 			this.curCapRate = 0;
 		}
 	}
 	
 	public void incrementRunChance(double incre){
-		this.curRunChance += incre;
+		this.curRunChance *= 1 + incre;
 		if (this.curRunChance > 1){
 			this.curRunChance = 1;
 		}
 	}
 	
 	public void decrementRunChance(double decre){
-		this.curRunChance -= decre;
+		this.curRunChance *= 1 - decre;
 		if (this.curRunChance < 0){
 			this.curRunChance = 0;
 		}

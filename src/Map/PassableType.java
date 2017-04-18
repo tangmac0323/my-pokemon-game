@@ -1,5 +1,5 @@
 package Map;
 
 public enum PassableType {
-	SHORTGRASS, LONGGRASS, AIR;
+	SHORTGRASS, LONGGRASS, AIR, GATE;
 }

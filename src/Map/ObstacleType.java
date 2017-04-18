@@ -1,5 +1,5 @@
 package Map;
 
 public enum ObstacleType {
-	TREE, ROCK, CLIFF, WATER, ITEM, NONE;
+	TREE, ROCK, HOUSE, WATER, ITEM, NONE;
 }

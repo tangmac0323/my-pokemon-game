@@ -21,9 +21,6 @@ public class MapBlock {
 		this.ground = groundType;
 		this.obstacle = obstacleType;
 		this.passType = passType;
-				
-		//
-		
 	}
 	
 	// getter
