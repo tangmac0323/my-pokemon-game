@@ -1,6 +1,10 @@
 package Map;
 
+import java.awt.Point;
+
 public class Map_BottomLeft extends Map{
+	private Point topPortal;
+	private Point rightPortal;
 
 	@Override
 	public void mapGenerator() {
@@ -14,6 +18,14 @@ public class Map_BottomLeft extends Map{
 		
 		// TODO: passable
 		
+	}
+	
+	public Point getTopPortal(){
+		return this.topPortal;
+	}
+	
+	public Point getRightPortal(){
+		return this.rightPortal;
 	}
 
 }

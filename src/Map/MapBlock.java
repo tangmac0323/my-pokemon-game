@@ -56,7 +56,7 @@ public class MapBlock {
 	}
 	
 	public boolean canMeetPokemon(){
-		if (this.passType != PassableType.AIR){
+		if (this.passType != PassableType.AIR && this.obstacle == ObstacleType.NONE){
 			return true;
 		}
 		else{

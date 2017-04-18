@@ -2,8 +2,8 @@
 <class-diagram version="1.1.14" icons="true" automaticImage="JPEG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
   router="FAN">  
-  <class id="1" language="java" name="GameModel.Game" project="pokemon_safari_zone" 
-    file="/pokemon_safari_zone/src/GameModel/Game.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="1" language="java" name="GameModel.GameModel" project="pokemon_safari_zone" 
+    file="/pokemon_safari_zone/src/GameModel/GameModel.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="569" y="329"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -29,16 +29,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="Inventory.ItemPool" project="pokemon_safari_zone" 
-    file="/pokemon_safari_zone/src/Inventory/ItemPool.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="713" y="219"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="Map.Map" project="pokemon_safari_zone" 
+  <class id="4" language="java" name="Map.Map" project="pokemon_safari_zone" 
     file="/pokemon_safari_zone/src/Map/Map.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="88" width="104" x="951" y="296"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -47,7 +38,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="Trainer.Trainer" project="pokemon_safari_zone" 
+  <class id="5" language="java" name="Trainer.Trainer" project="pokemon_safari_zone" 
     file="/pokemon_safari_zone/src/Trainer/Trainer.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="214" y="116"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -56,7 +47,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="Pokemon.Pokemon" project="pokemon_safari_zone" 
+  <class id="6" language="java" name="Pokemon.Pokemon" project="pokemon_safari_zone" 
     file="/pokemon_safari_zone/src/Pokemon/Pokemon.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="303" y="348"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -65,7 +56,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="Pokemon.PokemonCollection" project="pokemon_safari_zone" 
+  <class id="7" language="java" name="Pokemon.PokemonCollection" project="pokemon_safari_zone" 
     file="/pokemon_safari_zone/src/Pokemon/PokemonCollection.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="96" y="421"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -74,39 +65,6 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="Pokemon.PokemonPool" project="pokemon_safari_zone" 
-    file="/pokemon_safari_zone/src/Pokemon/PokemonPool.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="294" y="575"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <association id="10">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="11" name="players">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="12" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="13">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="14" name="worldMap">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="15" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

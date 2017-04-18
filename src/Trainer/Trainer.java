@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import GameModel.Direction;
 import Inventory.ItemCollection;
+import Inventory.ItemType;
 import Pokemon.Pokemon;
 import Pokemon.PokemonCollection;
 import Inventory.Item;
@@ -53,7 +54,7 @@ public class Trainer {
 		this.faceDir = dir;
 	}
 	
-	public void addItem(Item item){
+	public void addItem(ItemType item){
 		this.inventory.addItem(item);
 	}
 	
@@ -76,5 +77,25 @@ public class Trainer {
 	
 	public void decrementBonusRun(double num){
 		this.bonusRun -= num;
+	}
+	
+	public int getStepCount(){
+		return this.stepCount;
+	}
+	
+	public int getRow(){
+		return this.rowCoords;
+	}
+	
+	public int getCol(){
+		return this.colCoords;
+	}
+	
+	public double getBonusCapture(){
+		return this.bonusCapture;
+	}
+	
+	public double getBonusRun(){
+		return this.bonusRun;
 	}
 }
