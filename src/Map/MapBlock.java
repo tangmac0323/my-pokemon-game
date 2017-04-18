@@ -12,15 +12,15 @@ package Map;
 public class MapBlock {
 	
 	private final GroundType ground;
-	private final ObstacleType obstacle;
-	private final PassableType passType;
+	private ObstacleType obstacle;
+	private PassableType passType;
 	//private final boolean passable;
 	
 	// constructor
-	public MapBlock(GroundType groundType, ObstacleType obstacleType, PassableType passType){
+	public MapBlock(GroundType groundType){
 		this.ground = groundType;
-		this.obstacle = obstacleType;
-		this.passType = passType;
+		this.obstacle = ObstacleType.NONE;
+		this.passType = PassableType.AIR;
 	}
 	
 	// getter
@@ -34,6 +34,14 @@ public class MapBlock {
 	
 	public PassableType getPassType(){
 		return this.passType;
+	}
+	
+	public void setObstacle(ObstacleType ob){
+		this.obstacle = ob;
+	}
+	
+	public void setPassable(PassableType ps){
+		this.passType = ps;
 	}
 	
 	
