@@ -7,7 +7,7 @@ public abstract class Map {
 	public Map(){
 		this.map = new MapBlock[128][128];
 		this.mapSize = 128;
-		
+		this.mapGenerator();
 	}
 	
 	// getter and setter
