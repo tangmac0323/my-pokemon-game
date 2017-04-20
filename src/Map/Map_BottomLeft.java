@@ -9,12 +9,31 @@ public class Map_BottomLeft extends Map{
 	@Override
 	public void mapGenerator() {
 		// TODO: basic ground type
-		this.map[0][1] = new MapBlock(GroundType.GRASSLAND);
-		
+		for (int i = 0; i < this.getSize(); i ++){
+			for (int j = 0; j < this.getSize(); j ++){
+				if (Math.random() > 0.5){
+					this.map[i][j] = new MapBlock(GroundType.GRASSLAND);
+				}
+				else{
+					this.map[i][j] = new MapBlock(GroundType.SAND);
+				}
+			}
+		}
 		
 		// TODO: obstacle
-		this.map[0][1].setObstacle(ObstacleType.TREE);
-		
+		for (int i = 10; i < this.getSize() - 10; i ++){
+			for (int j = 10; j < this.getSize() - 10; j ++){
+				if (Math.random() > 0.95){
+					this.map[i][j].setObstacle(ObstacleType.ROCK);
+				}
+				else if (Math.random() < 0.1){
+					this.map[i][j].setObstacle(ObstacleType.TREE);
+				}
+				else{
+					// TO Nothing
+				}
+			}
+		}		
 		
 		// TODO: passable
 		

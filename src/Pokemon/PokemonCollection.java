@@ -17,6 +17,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 public class PokemonCollection implements TableModel, Serializable{
+	private static final long serialVersionUID = -1946656042672613799L;
+	
 	// an array list to store the pokemon
 	private ArrayList<Pokemon> pokemonList;
 	
@@ -29,6 +31,11 @@ public class PokemonCollection implements TableModel, Serializable{
 	// add new pokemon into the collection
 	public void addPokemon(Pokemon newPokemon){
 		this.pokemonList.add(newPokemon);
+	}
+	
+	// get the size of the collection
+	public int getSize(){
+		return this.pokemonList.size();
 	}
 
 

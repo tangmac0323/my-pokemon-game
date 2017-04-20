@@ -1,12 +1,17 @@
 package Inventory;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 public class ItemCollection implements TableModel, Serializable{
+
+	private static final long serialVersionUID = 2624045140265552470L;
+	
+	
 	private ArrayList<Item> itemList;
 	
 	public ItemCollection(){
@@ -69,33 +74,49 @@ public class ItemCollection implements TableModel, Serializable{
 	}
 
 	@Override
-	public Class<?> getColumnClass(int arg0) {
-		// TODO Auto-generated method stub
+	public Class<?> getColumnClass(int col) {
+		if (col == 0){
+			return String.class;
+		}
+		
+		if (col == 1){
+			return Integer.class;
+		}
+				
 		return null;
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override
-	public String getColumnName(int arg0) {
-		// TODO Auto-generated method stub
+	public String getColumnName(int col) {
+		if (col == 0){
+			return "Item Type";
+		}
+		
+		if (col == 1){
+			return "Quantity";
+		}
+		
 		return null;
 	}
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return itemList.size();
 	}
 
 	@Override
-	public Object getValueAt(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getValueAt(int row, int col) {
+		if (col == 0){
+			return itemList.get(row).getName();
+		}
+		else{
+			return itemList.get(row).getCount();
+		}
 	}
 
 	@Override

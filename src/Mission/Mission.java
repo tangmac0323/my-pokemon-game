@@ -1,5 +1,7 @@
 package Mission;
 
+import Trainer.Trainer;
+
 public class Mission {
 	private int stepCap;
 	private final int initBall;
@@ -94,5 +96,44 @@ public class Mission {
 	
 	public void decrementStepCap(int num){
 		this.stepCap -= num;
+	}
+	
+	// Check if the mission is failed
+	public boolean checkMissionFailed(Trainer curTrainer){
+		if (curTrainer.getStepCount() == this.getStepCap() && !this.checkMissionComplete(curTrainer)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	// check if the mission is complete
+	public boolean checkMissionComplete(Trainer curTrainer){
+		if (type == MissionType.TWENTYPOKEMON){
+			if (curTrainer.getPokemonCollection().getSize() >= this.getTotalRequirement()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		else if (type == MissionType.THIRTYPOKEMON){
+			if (curTrainer.getPokemonCollection().getSize() >= this.getTotalRequirement()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		// ladder
+		else{
+			if (curTrainer.getStepCount() == this.getStepCap()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 	}
 }

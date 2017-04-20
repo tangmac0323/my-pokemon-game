@@ -1,5 +1,6 @@
 package Trainer;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -10,7 +11,9 @@ import Pokemon.Pokemon;
 import Pokemon.PokemonCollection;
 import Inventory.Item;
 
-public class Trainer {
+public class Trainer implements Serializable{
+
+	private static final long serialVersionUID = 3185483056462008814L;
 	
 	// loggin information
 	//private final String userName;
@@ -25,8 +28,8 @@ public class Trainer {
 	
 	// in-game information
 	private int stepCount;
-	private int rowCoords;
-	private int colCoords;
+	private int xCoords;
+	private int yCoords;
 	private double bonusCapture;
 	private double bonusRun;
 	
@@ -40,6 +43,27 @@ public class Trainer {
 		
 		this.bonusCapture = 0;
 		this.bonusRun = 0;
+	}
+	
+	public Direction getFaceDir(){
+		return faceDir;
+	}
+	
+	public void setFaceDir(Direction dir){
+		this.faceDir = dir;
+	}
+	
+	public void setLocation(int x, int y){
+		xCoords = x;
+		yCoords = y;
+	}
+	
+	public PokemonCollection getPokemonCollection(){
+		return this.pokemonCollection;
+	}
+	
+	public ItemCollection getInventory(){
+		return this.inventory;
 	}
 	
 	public void incrementStep(int num){
@@ -84,11 +108,11 @@ public class Trainer {
 	}
 	
 	public int getRow(){
-		return this.rowCoords;
+		return this.xCoords;
 	}
 	
 	public int getCol(){
-		return this.colCoords;
+		return this.yCoords;
 	}
 	
 	public double getBonusCapture(){
