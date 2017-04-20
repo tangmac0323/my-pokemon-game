@@ -39,7 +39,7 @@ public class ItemCollection implements TableModel, Serializable{
 		
 	}
 	
-	public Item createType(ItemType type){
+	private Item createType(ItemType type){
 		if (type == ItemType.BALL){
 			return new SafariBall();
 		}
@@ -72,9 +72,11 @@ public class ItemCollection implements TableModel, Serializable{
 		
 	}
 	
+	/*
 	public void useItem(int i, Trainer trainer){
 		itemList.get(i).useItem(trainer);
 	}
+	*/
 
 	@Override
 	public void addTableModelListener(TableModelListener arg0) {
