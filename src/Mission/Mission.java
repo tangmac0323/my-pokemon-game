@@ -58,10 +58,10 @@ public class Mission {
 			this.legendRequirement = 1;
 		}
 		else{
-			this.stepCap = 500;
+			this.stepCap = 10;
 			this.initBall = 30;
 			this.rareRequirement = 0;
-			this.totalRequirement = 0;
+			this.totalRequirement = 5;
 			this.legendRequirement = 0;
 		}
 	}
@@ -119,6 +119,14 @@ public class Mission {
 			}
 		}
 		else if (type == MissionType.THIRTYPOKEMON){
+			if (curTrainer.getPokemonCollection().getSize() >= this.getTotalRequirement()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		else if (type == MissionType.TEST){
 			if (curTrainer.getPokemonCollection().getSize() >= this.getTotalRequirement()){
 				return true;
 			}

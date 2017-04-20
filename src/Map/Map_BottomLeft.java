@@ -14,7 +14,11 @@ public class Map_BottomLeft extends Map{
 		// TODO: basic ground type
 		for (int i = 0; i < this.getSize(); i ++){
 			for (int j = 0; j < this.getSize(); j ++){
-				if (Math.random() > 0.5){
+				if (i == 0 || j == 0){
+					this.map[i][j] = new MapBlock(GroundType.SAND);
+					this.map[i][j].setObstacle(ObstacleType.ROCK);
+				}
+				else if (Math.random() > 0.5){
 					this.map[i][j] = new MapBlock(GroundType.GRASSLAND);
 				}
 				else{
@@ -38,6 +42,12 @@ public class Map_BottomLeft extends Map{
 			}
 		}		
 		
+		// remove the obstacle around the centre
+		for (int i = 55; i < this.getSize() - 55; i ++){
+			for (int j = 55; j < this.getSize() - 55; j ++){
+				this.map[i][j].setObstacle(ObstacleType.NONE);
+			}
+		}	
 		// TODO: passable
 		
 	}

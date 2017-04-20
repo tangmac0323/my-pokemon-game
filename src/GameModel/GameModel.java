@@ -6,6 +6,7 @@ import java.util.Observable;
 
 import Map.*;
 import Mission.*;
+import Pokemon.*;
 import Trainer.*;
 
 public class GameModel extends Observable implements Serializable{
@@ -29,8 +30,9 @@ public class GameModel extends Observable implements Serializable{
 	
 	// game information
 	private Mission mission;
-	private boolean isEnd = true;
+	private boolean isOver = false;
 	private boolean isWin = false;
+	private boolean isLost = false;
 	
 	public GameModel(){
 		initiateMap();
@@ -39,6 +41,11 @@ public class GameModel extends Observable implements Serializable{
 		xPrevCoords = 65;
 		yPrevCoords = 65;
 		setCurMap(map_BL);
+		setMission(new Mission(MissionType.TEST));
+		curTrainer.catchPokemon(new Abra("A_1"));
+		curTrainer.catchPokemon(new Abra("A_2"));
+		curTrainer.catchPokemon(new Abra("A_3"));
+		curTrainer.catchPokemon(new Mew("M"));
 	}
 		
 	public void setTrainer(Trainer trainer){
@@ -135,28 +142,28 @@ public class GameModel extends Observable implements Serializable{
 		
 		// move direction to the east
 		if (dir == Direction.EAST){
-			System.out.println("Move to EAST");
+			//System.out.println("Move to EAST");
 			// set the next coords
 			nextX = xCoords + 1;
 			nextY = yCoords;
 		}
 		// move to west
 		else if (dir == Direction.WEST){
-			System.out.println("Move to WEST");
+			//System.out.println("Move to WEST");
 			// set the next coords
 			nextX = xCoords - 1;
 			nextY = yCoords;
 		}
 		// move to south
 		else if (dir == Direction.SOUTH){
-			System.out.println("Move to SOUTH");
+			//System.out.println("Move to SOUTH");
 			// set the next coords
 			nextX = xCoords;
 			nextY = yCoords + 1;
 		}
 		// move to north
 		else{
-			System.out.println("Move to NORTH");
+			//System.out.println("Move to NORTH");
 			// set the next coords
 			nextX = xCoords;
 			nextY = yCoords - 1;
@@ -190,6 +197,7 @@ public class GameModel extends Observable implements Serializable{
 			pokemonEncounter();
 		}		
 		else{
+			curTrainer.incrementStep(1);
 			setLocation(nextX, nextY);
 		}
 		
@@ -272,19 +280,38 @@ public class GameModel extends Observable implements Serializable{
 		this.setLocation(newX, newY);
 	}
 	
-	public void checkGameOver(){
-		this.isEnd = mission.checkMissionFailed(curTrainer);
+	public void checkLost(){
+		this.isLost = mission.checkMissionFailed(curTrainer);
 	}
 	
 	public void checkWin(){
 		this.isWin = mission.checkMissionComplete(curTrainer);
 	}
 	
-	public boolean isGameOver(){
-		return this.isEnd;
+	public boolean isLost(){
+		checkLost();
+		return this.isLost;
 	}
 	
 	public boolean isWin(){
+		checkWin();
 		return this.isWin;
+	}
+	
+	public boolean isOver(){
+		if (isWin || isLost){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public int getStepCount(){
+		return curTrainer.getStepCount();
+	}
+	
+	public Trainer getTrainer(){
+		return this.curTrainer;
 	}
 }

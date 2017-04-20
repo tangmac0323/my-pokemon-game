@@ -6,5 +6,6 @@ public enum MissionType {
 	TWENTYPOKEMON, 
 	THIRTYPOKEMON, 
 	FIFTYPOKEMON, 
-	FIVERARE;
+	FIVERARE,
+	TEST;
 }

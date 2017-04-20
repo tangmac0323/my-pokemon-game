@@ -16,6 +16,9 @@ public class ItemCollection implements TableModel, Serializable{
 	
 	public ItemCollection(){
 		this.itemList = new ArrayList<Item>();
+		addItem(ItemType.BALL);
+		addItem(ItemType.BALL);
+		addItem(ItemType.BALL);
 		
 	}
 	

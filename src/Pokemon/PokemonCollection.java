@@ -57,6 +57,10 @@ public class PokemonCollection implements TableModel, Serializable{
 		}
 		
 		if (col == 2){
+			return String.class;
+		}
+		
+		if (col == 3){
 			return LocalDateTime.class;
 		}
 		
@@ -66,7 +70,7 @@ public class PokemonCollection implements TableModel, Serializable{
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return 4;
 	}
 
 
@@ -77,10 +81,14 @@ public class PokemonCollection implements TableModel, Serializable{
 		}
 		
 		if (col == 1){
-			return "Name";
+			return "Type";
 		}
 		
 		if (col == 2){
+			return "Nickname";
+		}
+		
+		if (col == 3){
 			return "Captured Time";
 		}
 		
@@ -100,9 +108,12 @@ public class PokemonCollection implements TableModel, Serializable{
 			return this.pokemonList.get(row).getSpecy().getIndex();
 		}
 		if (col == 1){
+			return this.pokemonList.get(row).getSpecy().getName();
+		}		
+		if (col == 2){
 			return this.pokemonList.get(row).getName();
 		}
-		if (col == 2){
+		if (col == 3){
 			return this.pokemonList.get(row).getMetDate();
 		}
 		

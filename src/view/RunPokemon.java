@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,10 +16,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import GameModel.Direction;
 import GameModel.GameModel;
@@ -31,6 +40,10 @@ public class RunPokemon extends JFrame {
 	// declare the main window
 	private final static int DefaultHeight = 1200;
 	private final static int DefaultWidth = 800;
+	private JLabel statusBar;
+	private JLabel missionBoard;
+	private JTable inventoryTable;
+	private JTable pokemonTable;
 	
 	// declare the view
 	private MainGameView mainGamePanel;
@@ -43,7 +56,9 @@ public class RunPokemon extends JFrame {
 	
 	// declare game variable
 	private GameModel gameModel;
-	
+	private boolean isOver;
+	private boolean isWin;
+	private boolean isLost;
 	
 	// main function
 	public static void main(String[] args) {
@@ -75,7 +90,11 @@ public class RunPokemon extends JFrame {
 				setUpMainWindow();
 				setUpGameView();		
 				addEventListener();
-				System.out.println("GUI set up completed");
+				setUpInfoBoard();
+				setUpMissionBoard();
+				setUpInventory();
+				setUpPokemonTable();
+				//System.out.println("GUI set up completed");
 	}
 	
 	public void setUpMainWindow(){
@@ -109,6 +128,68 @@ public class RunPokemon extends JFrame {
 		this.addWindowListener(new windowsOnExit());
 	}
 	
+	public void setUpInfoBoard(){
+		statusBar = new JLabel("Trainer: " + gameModel.getTrainer().getID(), SwingConstants.LEFT);
+		statusBar.setBounds(700, 25, 250, 30);
+		statusBar.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		getContentPane().add(statusBar);
+	}
+	
+	// show the mission board
+	public void setUpMissionBoard(){
+		missionBoard = new JLabel("<html>Mission Statistic:<br>" 
+								+ "&nbsp;&nbsp;&nbsp;Step Count: " + gameModel.getStepCount() + " / " + gameModel.getMission().getStepCap() + "<br>"
+								+ "&nbsp;&nbsp;&nbsp;Total Pokemon Count: " + gameModel.getTrainer().getPokemonCollection().getSize() + " / " + gameModel.getMission().getTotalRequirement() + "</html>",SwingConstants.LEFT);
+		missionBoard.setBounds(700, 100, 250, 80);
+		missionBoard.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		getContentPane().add(missionBoard);
+	}
+	
+	// show the inventory table
+	public void setUpInventory(){
+		inventoryTable = new JTable(gameModel.getTrainer().getInventory());
+		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(gameModel.getTrainer().getInventory());
+		inventoryTable.setRowSorter(sorter);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+		inventoryTable.getColumn("Item Type").setCellRenderer( centerRenderer );		
+		inventoryTable.getColumn("Quantity").setCellRenderer( centerRenderer );
+		inventoryTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+		inventoryTable.getColumnModel().getColumn(1).setPreferredWidth(40);
+
+		JScrollPane pane = new JScrollPane(inventoryTable);
+		pane.setBounds(700, 220, 270, 150);
+		getContentPane().add(pane);
+	}
+	
+	// show the inventory table
+	public void setUpPokemonTable(){
+		pokemonTable = new JTable(gameModel.getTrainer().getPokemonCollection());
+		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(gameModel.getTrainer().getPokemonCollection());
+		pokemonTable.setRowSorter(sorter);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+		pokemonTable.getColumn("Pokedex Index").setCellRenderer( centerRenderer );		
+		pokemonTable.getColumn("Captured Time").setCellRenderer( centerRenderer );
+		pokemonTable.getColumn("Nickname").setCellRenderer( centerRenderer );
+		pokemonTable.getColumn("Type").setCellRenderer( centerRenderer );
+		pokemonTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+		pokemonTable.getColumnModel().getColumn(1).setPreferredWidth(40);
+		pokemonTable.getColumnModel().getColumn(2).setPreferredWidth(40);
+		
+		JScrollPane pane = new JScrollPane(pokemonTable);
+		pane.setBounds(700, 410, 405, 150);
+		getContentPane().add(pane);
+	}
+	
+	// add use item button
+	public void setUpItemButton(){
+		
+	}
+	
+	
 	// saving the pokemon game data
 	public void saveData(){
 		try {
@@ -141,17 +222,17 @@ public class RunPokemon extends JFrame {
 		}
 	}
 	
-	/*
+
 	// move listener
 	private class MoveListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			gameModel.update();
+
 		}
 
 	}
-	*/
+
 	// key board listener
 		private class myKeyListener implements KeyListener {
 
@@ -162,20 +243,31 @@ public class RunPokemon extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent key) {
-				if (key.getKeyCode() == KeyEvent.VK_UP) {
-					gameModel.moveTrainer(Direction.NORTH);
+				if (!isOver){
+					if (key.getKeyCode() == KeyEvent.VK_UP) {
+						gameModel.moveTrainer(Direction.NORTH);
+					}
+					if (key.getKeyCode() == KeyEvent.VK_DOWN) {
+						gameModel.moveTrainer(Direction.SOUTH);
+					}
+					if (key.getKeyCode() == KeyEvent.VK_LEFT) {
+						gameModel.moveTrainer(Direction.WEST);
+					}
+					if (key.getKeyCode() == KeyEvent.VK_RIGHT) {
+						gameModel.moveTrainer(Direction.EAST);
+					}
+					// update infoboard
+					missionBoard.setText("<html>Mission Statistic:<br>" 
+								+ "&nbsp;&nbsp;&nbsp;Step Count: " + gameModel.getStepCount() + " / " + gameModel.getMission().getStepCap() + "<br>"
+								+ "&nbsp;&nbsp;&nbsp;Total Pokemon Count: " + gameModel.getTrainer().getPokemonCollection().getSize() + " / " + gameModel.getMission().getTotalRequirement() + "</html>");
+					//mainGamePanel.requestFocus();
+					//System.out.println("New location: " + gameModel.getLocation());	
+					
+					//System.out.println("Hehe");
+					// check win/lost
+					checkGameResult();
 				}
-				if (key.getKeyCode() == KeyEvent.VK_DOWN) {
-					gameModel.moveTrainer(Direction.SOUTH);
-				}
-				if (key.getKeyCode() == KeyEvent.VK_LEFT) {
-					gameModel.moveTrainer(Direction.WEST);
-				}
-				if (key.getKeyCode() == KeyEvent.VK_RIGHT) {
-					gameModel.moveTrainer(Direction.EAST);
-				}
-				//mainGamePanel.requestFocus();
-				System.out.println("New location: " + gameModel.getLocation());	
+
 			}
 
 			@Override
@@ -204,15 +296,17 @@ public class RunPokemon extends JFrame {
 
 		@Override
 		public void windowClosing(WindowEvent arg0) {
-			int userPrompt = JOptionPane.showConfirmDialog(null, "Do you want to save the data?");
-			// if the user choose yes, then save the data
-			if (userPrompt == JOptionPane.YES_OPTION) {
-				saveData();
-				System.exit(0);
-			}
-			// if the user choose no, exit the program
-			else {
-				System.exit(0);
+			if (!isOver){
+				int userPrompt = JOptionPane.showConfirmDialog(null, "Do you want to save the data?");
+				// if the user choose yes, then save the data
+				if (userPrompt == JOptionPane.YES_OPTION) {
+					saveData();
+					System.exit(0);
+				}
+				// if the user choose no, exit the program
+				else {
+					System.exit(0);
+				}
 			}
 		}
 
@@ -240,6 +334,20 @@ public class RunPokemon extends JFrame {
 			
 		}
 		
+	}
+	
+	public void checkGameResult(){
+		if (gameModel.isWin()){
+			missionBoard.setText("<html>YOU WIN<br>&nbsp;&nbsp;&nbsp;THE GAME IS OVER</html>");
+			isWin = true;
+			isOver = true;
+		}
+		
+		if (gameModel.isLost()){
+			missionBoard.setText("<html>YOU LOST<br>&nbsp;&nbsp;&nbsp;THE GAME IS OVER</html>");
+			isLost = true;
+			isOver = true;
+		}
 	}
 	
 }

@@ -122,4 +122,8 @@ public class Trainer implements Serializable{
 	public double getBonusRun(){
 		return this.bonusRun;
 	}
+	
+	public String getID(){
+		return this.id;
+	}
 }

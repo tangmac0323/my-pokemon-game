@@ -45,7 +45,7 @@ public class MainGameView extends JPanel implements Observer{
 		loadImages();
 		repaint();
 		//curLocation = model.getLocation();
-		System.out.println("Initiate the view");
+		//System.out.println("Initiate the view");
 	}
 		
 	// draw the map
@@ -88,8 +88,9 @@ public class MainGameView extends JPanel implements Observer{
 				
 			}	
 			
+			// draw the trainer
 			g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
-			System.out.println("Current Location: " + trainerOnMap);
+			//System.out.println("Current Location: " + trainerOnMap);
 			
 			// declare the draw panel coordinates
 			x = 0;
@@ -113,6 +114,11 @@ public class MainGameView extends JPanel implements Observer{
 			
 			x = 0;
 			y = 0;
+			
+			// re-draw the trainer if there is an obstacle upon it
+			//if (model.getCurMap().getBlock(curLocation.x, curLocation.y - 1).getObstacle()!=ObstacleType.NONE){
+				//g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
+			//}
 		}
 	}
 	
@@ -247,7 +253,7 @@ public class MainGameView extends JPanel implements Observer{
 		
 		// calculate the increment
 		//startTimer();
-		System.out.println("Current Location: " + curLocation + " Final Location" + finalLocation);
+		//System.out.println("Current Location: " + curLocation + " Final Location" + finalLocation);
 		if (curLocation.equals(finalLocation)){
 			repaint();
 		}
