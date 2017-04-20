@@ -1,6 +1,11 @@
 package Map;
 
-public abstract class Map {
+import java.io.Serializable;
+
+public abstract class Map implements Serializable{
+
+	private static final long serialVersionUID = -2330121193394533506L;
+	
 	protected final MapBlock[][] map;	// store the map as grid
 	private final int mapSize;
 	
@@ -25,6 +30,7 @@ public abstract class Map {
 	// TODO: GENERATE MAP
 	public abstract void mapGenerator();
 	
+	/*
 	public void printMap(){
 		for (int i = 0; i < 129; i ++){
 			for (int j = 0; j < 129; j++){
@@ -44,6 +50,7 @@ public abstract class Map {
 			System.out.println("");
 		}
 	}
+	*/
 
 }
 

@@ -9,7 +9,12 @@
 
 package Map;
 
-public class MapBlock {
+import java.io.Serializable;
+
+public class MapBlock implements Serializable{
+	
+
+	private static final long serialVersionUID = -4085092152859549598L;
 	
 	private final GroundType ground;
 	private ObstacleType obstacle;

@@ -16,6 +16,8 @@ public class GameModel extends Observable implements Serializable{
 	private Trainer curTrainer;
 	private int xCoords;
 	private int yCoords;
+	private int xPrevCoords;
+	private int yPrevCoords;
 	
 	// map information
 	private Map_BottomLeft map_BL;
@@ -34,6 +36,8 @@ public class GameModel extends Observable implements Serializable{
 		initiateMap();
 		curTrainer = new Trainer("tmt");
 		setLocation(65, 65);
+		xPrevCoords = 65;
+		yPrevCoords = 65;
 		setCurMap(map_BL);
 	}
 		
@@ -73,11 +77,21 @@ public class GameModel extends Observable implements Serializable{
 		return this.BlockPixel;
 	}
 	*/
-		
+	
+	public Direction getDir(){
+		return curTrainer.getFaceDir();
+	}
+	
 	// get the location of the trainer
 	public Point getLocation(){
 		Point p = new Point();
 		p.setLocation(xCoords, yCoords);
+		return p;
+	}
+	
+	public Point getPrevLocation(){
+		Point p = new Point();
+		p.setLocation(xPrevCoords, yPrevCoords);
 		return p;
 	}
 	
@@ -96,6 +110,8 @@ public class GameModel extends Observable implements Serializable{
 	
 	// set the coordinate of the trainer
 	private void setLocation(int x, int y){
+		this.xPrevCoords = xCoords;
+		this.yPrevCoords = yCoords;
 		this.xCoords = x;
 		this.yCoords = y;
 	}
@@ -114,38 +130,43 @@ public class GameModel extends Observable implements Serializable{
 		// change direction first
 		this.changeDir(dir);
 				
-		int nextX = 0;
-		int nextY = 0;
+		int nextX = xCoords;
+		int nextY = yCoords;
 		
 		// move direction to the east
 		if (dir == Direction.EAST){
-			// set the next coords
-			nextX = xCoords;
-			nextY = yCoords + 1;
-		}
-		// move to west
-		else if (dir == Direction.WEST){
-			// set the next coords
-			nextX = xCoords;
-			nextY = yCoords - 1;
-		}
-		// move to south
-		else if (dir == Direction.SOUTH){
+			System.out.println("Move to EAST");
 			// set the next coords
 			nextX = xCoords + 1;
 			nextY = yCoords;
 		}
-		// move to north
-		else{
+		// move to west
+		else if (dir == Direction.WEST){
+			System.out.println("Move to WEST");
 			// set the next coords
 			nextX = xCoords - 1;
 			nextY = yCoords;
+		}
+		// move to south
+		else if (dir == Direction.SOUTH){
+			System.out.println("Move to SOUTH");
+			// set the next coords
+			nextX = xCoords;
+			nextY = yCoords + 1;
+		}
+		// move to north
+		else{
+			System.out.println("Move to NORTH");
+			// set the next coords
+			nextX = xCoords;
+			nextY = yCoords - 1;
 		}
 		
 		// block the path if is an obstacle
 		if (curMap.getBlock(nextX, nextY).getObstacle() != ObstacleType.NONE){
 			// TODO: notify the user that its not passable
 			// 		Check if it is an item
+			setLocation(xCoords, yCoords);
 		}
 		
 		// trigger the portal
@@ -168,6 +189,9 @@ public class GameModel extends Observable implements Serializable{
 			// call the pokemon encounter
 			pokemonEncounter();
 		}		
+		else{
+			setLocation(nextX, nextY);
+		}
 		
 		// update 
 		//checkGameOver();

@@ -7,9 +7,11 @@
  */
 package Inventory;
 
+import java.io.Serializable;
+
 import Trainer.Trainer;
 
-public abstract class Item {
+public abstract class Item implements Serializable{
 	private int count;	// store the quantity of the item
 	private String name;		// store the name of the item
 	private final ItemType type;

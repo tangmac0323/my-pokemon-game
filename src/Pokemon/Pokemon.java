@@ -1,5 +1,6 @@
 package Pokemon;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -33,7 +34,7 @@ import java.util.Random;
  */
 
 
-public abstract class Pokemon {
+public abstract class Pokemon implements Serializable{
 	// fixed data for the pokemon
 	private final LocalDateTime metDate;
 	private final Pokedex pokemonSpecy;

@@ -3,6 +3,9 @@ package Map;
 import java.awt.Point;
 
 public class Map_BottomLeft extends Map{
+	
+	private static final long serialVersionUID = 350193831245730397L;
+	
 	private Point topPortal;
 	private Point rightPortal;
 

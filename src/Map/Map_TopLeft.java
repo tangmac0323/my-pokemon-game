@@ -4,6 +4,9 @@ import java.awt.Point;
 
 public class Map_TopLeft extends Map{
 	
+
+	private static final long serialVersionUID = -7762644513628487590L;
+	
 	private Point bottomPortal;
 	private Point rightPortal;
 
