@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.Observable;
 
+import Inventory.ItemType;
 import Map.*;
 import Mission.*;
 import Pokemon.*;
@@ -46,6 +47,8 @@ public class GameModel extends Observable implements Serializable{
 		curTrainer.catchPokemon(new Abra("A_2"));
 		curTrainer.catchPokemon(new Abra("A_3"));
 		curTrainer.catchPokemon(new Mew("M"));
+		curTrainer.addItem(ItemType.CAPTURE_POTION_MEDIUM);
+		curTrainer.addItem(ItemType.STEP_POTION_LARGE);
 	}
 		
 	public void setTrainer(Trainer trainer){

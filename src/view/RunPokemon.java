@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,6 +45,7 @@ public class RunPokemon extends JFrame {
 	private JLabel missionBoard;
 	private JTable inventoryTable;
 	private JTable pokemonTable;
+	private JButton useItemButton;
 	
 	// declare the view
 	private MainGameView mainGamePanel;
@@ -94,6 +96,7 @@ public class RunPokemon extends JFrame {
 				setUpMissionBoard();
 				setUpInventory();
 				setUpPokemonTable();
+				setUpUseItemButton();
 				//System.out.println("GUI set up completed");
 	}
 	
@@ -130,7 +133,7 @@ public class RunPokemon extends JFrame {
 	
 	public void setUpInfoBoard(){
 		statusBar = new JLabel("Trainer: " + gameModel.getTrainer().getID(), SwingConstants.LEFT);
-		statusBar.setBounds(700, 25, 250, 30);
+		statusBar.setBounds(720, 25, 250, 30);
 		statusBar.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		getContentPane().add(statusBar);
 	}
@@ -140,7 +143,7 @@ public class RunPokemon extends JFrame {
 		missionBoard = new JLabel("<html>Mission Statistic:<br>" 
 								+ "&nbsp;&nbsp;&nbsp;Step Count: " + gameModel.getStepCount() + " / " + gameModel.getMission().getStepCap() + "<br>"
 								+ "&nbsp;&nbsp;&nbsp;Total Pokemon Count: " + gameModel.getTrainer().getPokemonCollection().getSize() + " / " + gameModel.getMission().getTotalRequirement() + "</html>",SwingConstants.LEFT);
-		missionBoard.setBounds(700, 100, 250, 80);
+		missionBoard.setBounds(720, 100, 250, 80);
 		missionBoard.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		getContentPane().add(missionBoard);
 	}
@@ -159,9 +162,19 @@ public class RunPokemon extends JFrame {
 		inventoryTable.getColumnModel().getColumn(1).setPreferredWidth(40);
 
 		JScrollPane pane = new JScrollPane(inventoryTable);
-		pane.setBounds(700, 220, 270, 150);
+		pane.setBounds(720, 220, 270, 150);
 		getContentPane().add(pane);
 	}
+	
+	// add use item button
+	public void setUpUseItemButton(){
+		useItemButton = new JButton("Use Item");
+		useItemButton.setBounds(720 + 305, 220, 100, 37);
+		useItemButton.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		getContentPane().add(useItemButton);
+		//useItemButton.addActionListener(new useItemButtonListener());
+	}
+	
 	
 	// show the inventory table
 	public void setUpPokemonTable(){
@@ -180,15 +193,10 @@ public class RunPokemon extends JFrame {
 		pokemonTable.getColumnModel().getColumn(2).setPreferredWidth(40);
 		
 		JScrollPane pane = new JScrollPane(pokemonTable);
-		pane.setBounds(700, 410, 405, 150);
+		pane.setBounds(720, 410, 405, 150);
 		getContentPane().add(pane);
 	}
-	
-	// add use item button
-	public void setUpItemButton(){
 		
-	}
-	
 	
 	// saving the pokemon game data
 	public void saveData(){
@@ -221,17 +229,31 @@ public class RunPokemon extends JFrame {
 			e.printStackTrace();
 		}
 	}
-	
-
-	// move listener
-	private class MoveListener implements ActionListener {
+		
+	// add the button listener for the item button
+	private class useItemButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			String text = ((JButton) e.getSource()).getText();
+			if (text.equals("Use Item")){
+				int index = inventoryTable.convertRowIndexToModel(inventoryTable.getSelectedRow());
+			}
 		}
-
+		
 	}
+	
+	// add the button listener for the item detail button
+	private class checkItemButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
 
 	// key board listener
 		private class myKeyListener implements KeyListener {

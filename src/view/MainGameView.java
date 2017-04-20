@@ -116,9 +116,30 @@ public class MainGameView extends JPanel implements Observer{
 			y = 0;
 			
 			// re-draw the trainer if there is an obstacle upon it
-			//if (model.getCurMap().getBlock(curLocation.x, curLocation.y - 1).getObstacle()!=ObstacleType.NONE){
-				//g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
-			//}
+			if (model.getCurMap().getBlock(finalLocation.x, finalLocation.y - 1).getObstacle() != ObstacleType.NONE){
+				g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
+				// TODO: Trying to solve the issue that some trees are blocked
+				/*
+				// redraw the tree
+				if (model.getCurMap().getBlock(finalLocation.x, finalLocation.y + 1).getObstacle() == ObstacleType.TREE){
+					BufferedImage tempTreeImg = treeSheet.getSubimage(Tree_Small_A_OFFSET_X, Tree_Small_A_OFFSET_Y, 
+							Tree_Small_A_Width, Tree_Small_A_Height);
+					g2.drawImage(tempTreeImg, finalLocation.x*MapBlockSize, (finalLocation.y + 1)*MapBlockSize, null);
+				}
+				*/
+			}
+			else if (model.getCurMap().getBlock(curLocation.x, curLocation.y - 1).getObstacle() != ObstacleType.NONE){
+				g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
+				// TODO: Trying to solve the issue that some trees are blocked
+				/*
+				// redraw the tree
+				if (model.getCurMap().getBlock(curLocation.x, curLocation.y + 1).getObstacle() == ObstacleType.TREE){
+					BufferedImage tempTreeImg = treeSheet.getSubimage(Tree_Small_A_OFFSET_X, Tree_Small_A_OFFSET_Y, 
+							Tree_Small_A_Width, Tree_Small_A_Height);
+					g2.drawImage(tempTreeImg, finalLocation.x*MapBlockSize, (curLocation.y + 1)*MapBlockSize, null);
+				}
+				*/
+			}
 		}
 	}
 	

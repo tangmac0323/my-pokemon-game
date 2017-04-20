@@ -58,7 +58,7 @@ public class Mission {
 			this.legendRequirement = 1;
 		}
 		else{
-			this.stepCap = 10;
+			this.stepCap = 50;
 			this.initBall = 30;
 			this.rareRequirement = 0;
 			this.totalRequirement = 5;

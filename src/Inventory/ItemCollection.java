@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import Trainer.Trainer;
+
 public class ItemCollection implements TableModel, Serializable{
 
 	private static final long serialVersionUID = 2624045140265552470L;
@@ -21,7 +23,7 @@ public class ItemCollection implements TableModel, Serializable{
 		addItem(ItemType.BALL);
 		
 	}
-	
+		
 	public void addItem(ItemType type){
 		// increase the count for the item
 		for (Item tempItem : itemList) {
@@ -68,6 +70,10 @@ public class ItemCollection implements TableModel, Serializable{
 		
 		return null;
 		
+	}
+	
+	public void useItem(int i, Trainer trainer){
+		itemList.get(i).useItem(trainer);
 	}
 
 	@Override

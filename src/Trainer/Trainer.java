@@ -126,4 +126,8 @@ public class Trainer implements Serializable{
 	public String getID(){
 		return this.id;
 	}
+	
+	public void useItem(int num){
+		inventory.useItem(num, this);
+	}
 }
