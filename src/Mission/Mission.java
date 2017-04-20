@@ -74,7 +74,7 @@ public class Mission {
 		return this.type;
 	}
 	
-	public int initBall(){
+	public int getInitBall(){
 		return this.initBall;
 	}
 	

@@ -17,7 +17,7 @@ public class InventoryTest {
 		b.getInfo();
 		ItemCollection collection = new ItemCollection();
 		a.increment(1);
-		assertEquals(a.getCount(), 2);
+		assertEquals(a.getCount(), 1);
 		b.decrement(1);
 		assertEquals(b.getCount(), 0);
 		assertTrue(a.getName().equals("Safari Ball"));
