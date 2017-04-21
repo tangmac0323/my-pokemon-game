@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +33,8 @@ import javax.swing.table.TableRowSorter;
 
 import GameModel.Direction;
 import GameModel.GameModel;
+import Mission.Mission;
+import Mission.MissionType;
 
 public class RunPokemon extends JFrame {
 	
@@ -69,15 +72,39 @@ public class RunPokemon extends JFrame {
 	}
 	
 	// constructor
-	public RunPokemon(){
+	public RunPokemon(){		
 		int userPrompt = JOptionPane.showConfirmDialog(null, "Do you want to start with presvious saved data?");
 		// if the user choose yes, load the saved file
 		if (userPrompt == JOptionPane.YES_OPTION) {
-			loadData();
+			// check if save file exist
+			File saveFile = new File(SAVEFILENAME_GAME);
+			if (saveFile.exists()){
+				loadData();
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "You dont have a saved file",
+					    "Inane error",
+					    JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
+			}
 		}
 		// if the user choose no, use default
 		else if (userPrompt == JOptionPane.NO_OPTION) {
 			gameModel = new GameModel();
+			Object[] options = {"25 Steps", "50 steps 5 pokemon"};
+			userPrompt = JOptionPane.showOptionDialog(null, "Press Yes for 50 step limit 5 pokemon caught to win, no for 25 step to win",
+													"Choose Mission",     
+													JOptionPane.YES_NO_CANCEL_OPTION,
+												    JOptionPane.QUESTION_MESSAGE,
+												    null,	//Icon
+												    options,
+												    options[0]);
+			if (userPrompt == 0){
+				gameModel.setMission(new Mission(MissionType.STANDARDLADDER));
+			}
+			else{
+				gameModel.setMission(new Mission(MissionType.TEST));
+			}
 		}
 		// chosen cancel
 		else {
@@ -278,6 +305,7 @@ public class RunPokemon extends JFrame {
 					if (key.getKeyCode() == KeyEvent.VK_RIGHT) {
 						gameModel.moveTrainer(Direction.EAST);
 					}
+					gameModel.setLocation(gameModel.getLocation().x, gameModel.getLocation().y);
 					// update infoboard
 					missionBoard.setText("<html>Mission Statistic:<br>" 
 								+ "&nbsp;&nbsp;&nbsp;Step Count: " + gameModel.getStepCount() + " / " + gameModel.getMission().getStepCap() + "<br>"

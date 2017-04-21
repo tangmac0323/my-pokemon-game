@@ -119,7 +119,7 @@ public class GameModel extends Observable implements Serializable{
 	}	
 	
 	// set the coordinate of the trainer
-	private void setLocation(int x, int y){
+	public void setLocation(int x, int y){
 		this.xPrevCoords = xCoords;
 		this.yPrevCoords = yCoords;
 		this.xCoords = x;

@@ -1,8 +1,13 @@
 package Mission;
 
+import java.io.Serializable;
+
 import Trainer.Trainer;
 
-public class Mission {
+public class Mission implements Serializable{
+
+	private static final long serialVersionUID = 5722314330503884060L;
+	
 	private int stepCap;
 	private final int initBall;
 	private final int rareRequirement;
@@ -16,7 +21,7 @@ public class Mission {
 		this.type = mission;
 		// record when 500 step down
 		if (mission == MissionType.STANDARDLADDER){
-			this.stepCap = 500;
+			this.stepCap = 25;
 			this.initBall = 30;
 			this.rareRequirement = 0;
 			this.totalRequirement = 0;
