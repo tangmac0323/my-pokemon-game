@@ -27,7 +27,6 @@ public class Map_BottomLeft extends Map{
 				}
 			}
 		}
-		this.map[0][0] = new MapBlock(GroundType.GRASSLAND);
 		
 		// TODO: obstacle
 		for (int i = 10; i < this.getSize() - 10; i ++){

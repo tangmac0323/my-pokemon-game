@@ -29,7 +29,7 @@ public class ModelTest {
 		model.chooseMap(2);
 		model.chooseMap(3);
 		model.chooseMap(0);
-		Mission newMission = new Mission(MissionType.FIFTYPOKEMON);
+		Mission newMission = new Mission(MissionType.TWENTYPOKEMON);
 		model.setMission(newMission);
 		assertTrue(model.getMission() == newMission);
 		assertTrue(model.getDir() == model.getTrainer().getFaceDir());
@@ -53,11 +53,11 @@ public class ModelTest {
 				model.moveTrainer(Direction.SOUTH);
 			}
 		}
-		assertTrue(!model.isLost());
+		assertTrue(model.isLost());
 		assertTrue(!model.isWin());
-		assertTrue(!model.isOver());
+		assertTrue(model.isOver());
 		assertTrue(model.getStepCount() != 0);
-		assertTrue(model.getCurMap().getBlock(0, 0).getGround() == GroundType.GRASSLAND);
+		assertTrue(model.getCurMap().getBlock(0, 0).getGround() == GroundType.SAND);
 		assertTrue(model.getCurMap().getBlock(0, 0).getPassType() == PassableType.AIR);
 		assertFalse(model.getCurMap().getBlock(0, 0).isPassable());
 

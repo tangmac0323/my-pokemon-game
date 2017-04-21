@@ -105,7 +105,7 @@ public class Mission implements Serializable{
 	
 	// Check if the mission is failed
 	public boolean checkMissionFailed(Trainer curTrainer){
-		if (curTrainer.getStepCount() == this.getStepCap() && !this.checkMissionComplete(curTrainer)){
+		if (curTrainer.getStepCount() >= this.getStepCap() && !this.checkMissionComplete(curTrainer)){
 			return true;
 		}
 		else{
@@ -141,7 +141,7 @@ public class Mission implements Serializable{
 		}
 		// ladder
 		else{
-			if (curTrainer.getStepCount() == this.getStepCap()){
+			if (curTrainer.getStepCount() >= this.getStepCap()){
 				return true;
 			}
 			else{
