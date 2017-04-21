@@ -29,7 +29,9 @@ public class ModelTest {
 		model.chooseMap(2);
 		model.chooseMap(3);
 		model.chooseMap(0);
+		
 		Mission newMission = new Mission(MissionType.TWENTYPOKEMON);
+		
 		model.setMission(newMission);
 		assertTrue(model.getMission() == newMission);
 		assertTrue(model.getDir() == model.getTrainer().getFaceDir());
@@ -39,6 +41,7 @@ public class ModelTest {
 		assertTrue(model.getPrevLocation().equals(tempPoint));
 		tempPoint.setLocation(0, 0);
 		model.update();
+		
 		for (int i = 0; i < 2000; i ++){
 			if (Math.random() < 0.25){
 				model.moveTrainer(Direction.WEST);
@@ -53,6 +56,7 @@ public class ModelTest {
 				model.moveTrainer(Direction.SOUTH);
 			}
 		}
+		
 		assertTrue(model.isLost());
 		assertTrue(!model.isWin());
 		assertTrue(model.isOver());
