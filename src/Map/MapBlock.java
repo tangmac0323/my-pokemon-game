@@ -45,10 +45,22 @@ public class MapBlock implements Serializable{
 		this.obstacle = ob;
 	}
 	
+	
+	/*
 	public void setPassable(PassableType ps){
 		this.passType = ps;
 	}
 	
+		
+	public boolean canMeetPokemon(){
+		if (this.passType != PassableType.AIR && this.obstacle == ObstacleType.NONE){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	*/
 	
 	// get passable status
 	public boolean isPassable(){
@@ -59,14 +71,4 @@ public class MapBlock implements Serializable{
 			return false;
 		}
 	}
-	
-	public boolean canMeetPokemon(){
-		if (this.passType != PassableType.AIR && this.obstacle == ObstacleType.NONE){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
 }

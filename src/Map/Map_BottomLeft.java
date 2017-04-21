@@ -14,7 +14,8 @@ public class Map_BottomLeft extends Map{
 		// TODO: basic ground type
 		for (int i = 0; i < this.getSize(); i ++){
 			for (int j = 0; j < this.getSize(); j ++){
-				if (i == 0 || j == 0){
+				// Obstacle around the map
+				if (i == 0 || j == 0 || i == this.getSize() - 1 || j == this.getSize() - 1){
 					this.map[i][j] = new MapBlock(GroundType.SAND);
 					this.map[i][j].setObstacle(ObstacleType.ROCK);
 				}
@@ -26,6 +27,7 @@ public class Map_BottomLeft extends Map{
 				}
 			}
 		}
+		this.map[0][0] = new MapBlock(GroundType.GRASSLAND);
 		
 		// TODO: obstacle
 		for (int i = 10; i < this.getSize() - 10; i ++){
@@ -51,7 +53,8 @@ public class Map_BottomLeft extends Map{
 		// TODO: passable
 		
 	}
-	
+	// TODO: we gonna use them in iterator 2
+	/*
 	public Point getTopPortal(){
 		return this.topPortal;
 	}
@@ -67,5 +70,6 @@ public class Map_BottomLeft extends Map{
 	public void setRightPortal(Point p){
 		this.rightPortal.setLocation(p);;
 	}
+	*/
 
 }

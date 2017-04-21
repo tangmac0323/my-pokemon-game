@@ -178,7 +178,8 @@ public class GameModel extends Observable implements Serializable{
 			// 		Check if it is an item
 			setLocation(xCoords, yCoords);
 		}
-		
+		// TODO: the following two part will be added in for iterator 2
+		/*
 		// trigger the portal
 		else if (curMap.getBlock(nextX, nextY).getPassType() == PassableType.PORTAL){
 			// count step
@@ -188,7 +189,6 @@ public class GameModel extends Observable implements Serializable{
 			p.setLocation(nextX, nextY);						
 			changeMap(curMap, p);
 		}	
-		
 		// encounter pokemon
 		else if (curMap.getBlock(nextX, nextY).getPassType() != PassableType.AIR){
 			// count step
@@ -198,25 +198,27 @@ public class GameModel extends Observable implements Serializable{
 			update();
 			// call the pokemon encounter
 			pokemonEncounter();
-		}		
+		}	
+		*/	
 		else{
 			curTrainer.incrementStep(1);
 			setLocation(nextX, nextY);
 		}
 		
-		// update 
-		//checkGameOver();
-		//checkWin();
 		update();
 	}
 	
+	/*
 	public void pokemonEncounter(){
 		// TODO: algorithm to encounter pokemon
 		// 		Might need to change the view
 		
 		return;
 	}
+	*/
 	
+	// TODO: The following part will be done for iterator 2
+	/*
 	public void changeMap(Map map, Point portal){
 		int newX = 0;
 		int newY = 0;
@@ -282,6 +284,8 @@ public class GameModel extends Observable implements Serializable{
 		// reset the coordinates and notify the observer
 		this.setLocation(newX, newY);
 	}
+	
+	*/
 	
 	public void checkLost(){
 		this.isLost = mission.checkMissionFailed(curTrainer);

@@ -16,7 +16,8 @@ public class Map_TopLeft extends Map{
 		
 	}
 	
-	
+	// TODO: we gonna use them in iterator 2
+	/*
 	public Point getBottomPortal(){
 		return this.bottomPortal;
 	}
@@ -24,5 +25,6 @@ public class Map_TopLeft extends Map{
 	public Point getRightPortal(){
 		return this.rightPortal;
 	}
+	*/
 
 }
