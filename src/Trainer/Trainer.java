@@ -73,11 +73,7 @@ public class Trainer implements Serializable{
 	public void decrementStep(int num){
 		this.stepCount -= num;
 	}
-	
-	public void setDirection(Direction dir){
-		this.faceDir = dir;
-	}
-	
+		
 	public void addItem(ItemType item){
 		this.inventory.addItem(item);
 	}
@@ -108,11 +104,11 @@ public class Trainer implements Serializable{
 	}
 	
 	public int getRow(){
-		return this.xCoords;
+		return this.yCoords;
 	}
 	
 	public int getCol(){
-		return this.yCoords;
+		return this.xCoords;
 	}
 	
 	public double getBonusCapture(){

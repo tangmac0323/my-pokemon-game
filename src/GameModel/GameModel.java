@@ -127,7 +127,7 @@ public class GameModel extends Observable implements Serializable{
 	}
 	
 	private void changeDir(Direction dir){
-		this.curTrainer.setDirection(dir);
+		this.curTrainer.setFaceDir(dir);
 	}
 	
 	public void update(){

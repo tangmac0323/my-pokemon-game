@@ -59,5 +59,13 @@ public class Map_BottomLeft extends Map{
 	public Point getRightPortal(){
 		return this.rightPortal;
 	}
+	
+	public void setTopPortal(Point p){
+		this.topPortal.setLocation(p);;
+	}
+	
+	public void setRightPortal(Point p){
+		this.rightPortal.setLocation(p);;
+	}
 
 }

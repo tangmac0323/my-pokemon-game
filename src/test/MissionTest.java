@@ -32,6 +32,10 @@ public class MissionTest {
 		assertTrue(a.getStepCap() == 500);
 		
 		Trainer trn = new Trainer("tmt");
+		assertFalse(g.checkMissionComplete(trn));
+		assertFalse(f.checkMissionComplete(trn));
+		assertFalse(e.checkMissionComplete(trn));
+		
 		assertFalse(e.checkMissionFailed(trn));
 		trn.incrementStep(500);
 		assertTrue(d.checkMissionComplete(trn));
@@ -43,6 +47,7 @@ public class MissionTest {
 		assertTrue(g.checkMissionComplete(trn));
 		assertTrue(f.checkMissionComplete(trn));
 		assertTrue(e.checkMissionComplete(trn));
+		
 	}
 
 }

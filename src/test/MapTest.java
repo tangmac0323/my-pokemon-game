@@ -1,5 +1,12 @@
 package test;
 
-public class MapTest {
+import static org.junit.Assert.fail;
 
+import org.junit.Test;
+
+public class MapTest {
+	@Test
+	public void test() {
+		
+	}
 }
