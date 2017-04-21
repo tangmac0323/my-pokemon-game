@@ -7,5 +7,5 @@ a new view for the game. Also trying to add some more fancy thing such as dynami
 Name: Chengyu Sun
 Mainly take care of the game map implementation and design the interface of the battle view and animation design.
 Name: Shanrui Zhang
-Mainly take care of the unit testing and debuging, also the sound track part.
+Mainly take care of the unit testing and debuging, also the sound track part.Make sure the progrom have no bug on model.
 
