@@ -88,6 +88,7 @@ public class RunPokemon extends JFrame {
 				System.exit(1);
 			}
 		}
+		
 		// if the user choose no, use default
 		else if (userPrompt == JOptionPane.NO_OPTION) {
 			gameModel = new GameModel();
