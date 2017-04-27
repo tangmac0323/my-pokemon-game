@@ -28,6 +28,7 @@ public class Trainer implements Serializable{
 	
 	// in-game information
 	private int stepCount;
+	private int totalStepCount;
 	private int xCoords;
 	private int yCoords;
 	private double bonusCapture;
@@ -68,6 +69,7 @@ public class Trainer implements Serializable{
 	
 	public void incrementStep(int num){
 		this.stepCount += num;
+		this.totalStepCount += num;
 	}
 	
 	public void decrementStep(int num){
@@ -103,6 +105,10 @@ public class Trainer implements Serializable{
 		return this.stepCount;
 	}
 	
+	public int getTotalStepCount(){
+		return this.totalStepCount;
+	}
+		
 	public int getRow(){
 		return this.yCoords;
 	}
@@ -123,9 +129,7 @@ public class Trainer implements Serializable{
 		return this.id;
 	}
 	
-	/*
-	public void useItem(int num){
-		inventory.useItem(num, this);
+	public void useItem(int index){
+		inventory.useItem(index, this);
 	}
-	*/
 }

@@ -201,8 +201,8 @@ public class GameModel extends Observable implements Serializable{
 		}	
 		*/	
 		else{
-			curTrainer.incrementStep(1);
 			setLocation(nextX, nextY);
+			curTrainer.incrementStep(1);
 		}
 		
 		update();
@@ -320,5 +320,12 @@ public class GameModel extends Observable implements Serializable{
 	
 	public Trainer getTrainer(){
 		return this.curTrainer;
+	}
+	
+	// call by the user to use an item
+	public void useItem(int index){
+		notifyObservers(curTrainer.getInventory().getItemType(index));
+		this.curTrainer.useItem(index);
+		setChanged();
 	}
 }
