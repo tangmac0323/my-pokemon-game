@@ -20,6 +20,7 @@ public class GameModel extends Observable implements Serializable{
 	private int yCoords;
 	private int xPrevCoords;
 	private int yPrevCoords;
+	private Pokemon curEncounterPokemon = null;
 	
 	// map information
 	private Map_BottomLeft map_BL;
@@ -57,6 +58,14 @@ public class GameModel extends Observable implements Serializable{
 	
 	public void setCurMap(Map map){
 		this.curMap = map;
+	}
+	
+	public void setCurEncounterPokemon(Pokemon pokemon){
+		curEncounterPokemon = pokemon;
+	}
+	
+	public Pokemon getCurEncounterPokemon(){
+		return this.curEncounterPokemon;
 	}
 	
 	public void chooseMap(int i){

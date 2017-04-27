@@ -39,10 +39,10 @@ public class BattleView extends JPanel implements Observer{
 	private int curTurn;
 	
 	// combat pokemon information
-	private Pokemon curPokemon;	// current pokemon
-	private double curRunRate;	// current run rate of the pokemon
-	private double curCapRate;	// current capture rate
-	private int curCapTurn;		// current maximum running turns
+	private Pokemon curPokemon;	// current encountering pokemon
+	//private double curRunRate;	// current run rate of the pokemon
+	//private double curCapRate;	// current capture rate
+	//private int curMaxTurn;		// current maximum running turns
 	
 	// declare variables for animation
 	private boolean openingEnd = false;	// flag to check if the openning animation has been played
@@ -57,7 +57,7 @@ public class BattleView extends JPanel implements Observer{
 	
 	// constructor
 	public BattleView(){
-		calculateData();
+		initData();
 		loadImages();
 		repaint();
 		this.addMouseListener(new ClickListener());
@@ -79,8 +79,32 @@ public class BattleView extends JPanel implements Observer{
 		g2.drawImage(drawBattleMenu(), 0, BattleField_Height, null);
 	}
 		
-	private void calculateData(){
+	// initiate the data when the battle begin
+	private void initData(){
+		// initiate the data when construct it
+		if (model == null){
+			curPokemon = null;
+			//curRunRate = 0;
+			//curCapRate = 0;
+			//curMaxTurn = 0;
+			return;
+		}
+				
+		// get the encountered pokemon
+		curPokemon = model.getCurEncounterPokemon();
 		
+		// calcualte and set the data for pokemon basing on the trainer data
+		double bonusRunChance = model.getTrainer().getBonusRun();
+		double bonusCapRate = model.getTrainer().getBonusCapture();
+		int bonusTurn = model.getTrainer().getBonusTurn();
+		
+		//curRunRate = curPokemon.getBasicRunChance() + bonusRunChance;
+		//curCapRate = curPokemon.getBasicCapRate() + bonusCapRate;
+		//curMaxTurn = curPokemon.getBasicMaxTurn() + bonusTurn;
+		
+		curPokemon.incrementCapRate(bonusCapRate);
+		curPokemon.decrementRunChance(bonusRunChance);
+		curPokemon.incrementMaxTurn(bonusTurn);
 	}
 	
 	public void setCurPokemon(Pokemon pokemon){
@@ -91,7 +115,6 @@ public class BattleView extends JPanel implements Observer{
 	public void update(Observable o, Object arg) {
 		if (battleEnd == false){
 			model = (GameModel) o;
-			calculateData();
 			
 			// play use item animation
 			if(arg != null){
@@ -102,6 +125,7 @@ public class BattleView extends JPanel implements Observer{
 			if (!openingEnd){
 				openingEnd = true;
 				playOpeningAnimation();
+				initData();
 			}
 			//repaint();
 		}
@@ -133,7 +157,7 @@ public class BattleView extends JPanel implements Observer{
 				int y = e.getY();
 				if (x >= 480 - RunButtonWidth - RunButtonWidth_OFFSET && x < 480 - RunButtonWidth_OFFSET 
 						&& y >= 320 - RunButtonHeight - RunButtonHeight_OFFSET && y < 320 - RunButtonHeight_OFFSET){
-					System.out.println("Click on: " + x + ", " + y);
+					//System.out.println("Click on: " + x + ", " + y);
 					battleEnd = true;
 					setVisible(false);
 				}

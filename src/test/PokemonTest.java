@@ -67,7 +67,7 @@ public class PokemonTest {
 		assertTrue(caterpie.getCurHP() < 1000);
 		assertTrue(caterpie.getCurMaxTurn() <50);
 		assertTrue(caterpie.getMaxHP() <2000);
-		assertTrue(caterpie.getMaxTurn() < 50);
+		assertTrue(caterpie.getBasicMaxTurn() < 50);
 		System.out.println(caterpie.getCurRunChance());
 		caterpie.setName("mike");
 		
@@ -79,7 +79,7 @@ public class PokemonTest {
 		caterpie.decrementRunChance(10.0);
 		caterpie.incrementMaxTurn(10);
 		caterpie.decrementMaxTurn(10);
-		caterpie.setCapTurn(10);
+		caterpie.recordCapTurn(10);
 		assertTrue(caterpie.getBasicRunChance() < 1);
 		assertTrue(caterpie.getBasicCapRate() < 1);
 		assertTrue(caterpie.getCapHpLimit() <100);
@@ -88,11 +88,11 @@ public class PokemonTest {
 		assertTrue(caterpie.getCurHP() < 1000);
 		assertTrue(caterpie.getCurMaxTurn() <50);
 		assertTrue(caterpie.getMaxHP() <2000);
-		assertTrue(caterpie.getMaxTurn() < 50);
+		assertTrue(caterpie.getBasicMaxTurn() < 50);
 		System.out.println(caterpie.getCurRunChance());
 		
 
-		System.out.println(caterpie.getMetDate());
+		System.out.println(caterpie.recordMetDate());
 		assertEquals(caterpie.getSpecy(), Pokedex.Caterpie);
 		assertEquals(caterpie.getQuality(), PokemonQuality.COMMON);
 		assertEquals(caterpie.getNickName(), "mike");

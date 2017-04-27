@@ -114,7 +114,7 @@ public class PokemonCollection implements TableModel, Serializable{
 			return this.pokemonList.get(row).getName();
 		}
 		if (col == 3){
-			return this.pokemonList.get(row).getMetDate();
+			return this.pokemonList.get(row).recordMetDate();
 		}
 		
 		return null;

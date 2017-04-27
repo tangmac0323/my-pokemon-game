@@ -31,6 +31,9 @@ public class Trainer implements Serializable{
 	private int totalStepCount;
 	private int xCoords;
 	private int yCoords;
+	
+	// bonus attribute
+	private int bonusTurn;	// add bonus turn for capture the pokemon
 	private double bonusCapture;
 	private double bonusRun;
 	
@@ -44,6 +47,7 @@ public class Trainer implements Serializable{
 		
 		this.bonusCapture = 0;
 		this.bonusRun = 0;
+		this.bonusTurn = 0;
 	}
 	
 	public Direction getFaceDir(){
@@ -84,6 +88,15 @@ public class Trainer implements Serializable{
 		this.pokemonCollection.addPokemon(newPokemon);
 	}
 	
+	
+	public void incrementBonusTurn(int num){
+		this.bonusTurn += num;
+	}
+	
+	public void decrementBonusTurn(int num){
+		this.bonusTurn -= num;
+	}	
+	
 	public void incrementBonusCapture(double num){
 		this.bonusCapture += num;
 	}
@@ -115,6 +128,10 @@ public class Trainer implements Serializable{
 	
 	public int getCol(){
 		return this.xCoords;
+	}
+	
+	public int getBonusTurn(){
+		return this.bonusTurn;
 	}
 	
 	public double getBonusCapture(){

@@ -54,7 +54,7 @@ public abstract class Pokemon implements Serializable{
 	
 	private int capHpLimit;	// the maximum hp allowed to be captured
 	private int curMaxTurn;
-	private int capTurn;	// store the turns spent on capture this pokemon
+	private int captureTurn;	// store the turns spent on capture this pokemon
 	
 	
 	// constructor
@@ -83,9 +83,9 @@ public abstract class Pokemon implements Serializable{
 		this.capHpLimit = randomCapHP(this.maxHP);
 		
 		this.basicMaxTurn = specy.getQuality().getMaxTurn();
-		this.curMaxTurn = this.basicMaxTurn;
 		
-		this.capTurn = 0;
+		this.captureTurn = 0;
+		this.curMaxTurn = 0;
 
 	}
 	
@@ -121,7 +121,7 @@ public abstract class Pokemon implements Serializable{
 	}
 	
 	// getter for the parameter
-	public LocalDateTime getMetDate(){
+	public LocalDateTime recordMetDate(){
 		return this.metDate;
 	}
 	
@@ -166,10 +166,10 @@ public abstract class Pokemon implements Serializable{
 	}
 	
 	public int getCapTurn(){
-		return this.capTurn;
+		return this.captureTurn;
 	}
 	
-	public int getMaxTurn(){
+	public int getBasicMaxTurn(){
 		return this.basicMaxTurn;
 	}
 	
@@ -236,8 +236,8 @@ public abstract class Pokemon implements Serializable{
 		}
 	}
 		
-	public void setCapTurn(int turn){
-		this.capTurn = turn;
+	public void recordCapTurn(int turn){
+		this.captureTurn = turn;
 	}
 	
 	public String getNickName(){
