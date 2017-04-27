@@ -114,7 +114,7 @@ public abstract class Pokemon implements Serializable{
 		return originRunChance;
 	}
 	
-	// TODO: need a algorithm to randomly set upo the max hp for
+	// TODO: need a algorithm to randomly set up the max hp for
 	//		capture
 	private int randomCapHP(int maxHP){
 		return (int)(0.5 * maxHP);

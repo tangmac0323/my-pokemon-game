@@ -2,6 +2,7 @@ package GameModel;
 
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Observable;
 
 import Inventory.ItemType;
@@ -20,7 +21,7 @@ public class GameModel extends Observable implements Serializable{
 	private int yCoords;
 	private int xPrevCoords;
 	private int yPrevCoords;
-	private Pokemon curEncounterPokemon = null;
+	private Pokemon curEncounterPokemon = new Abra("HQY");
 	
 	// map information
 	private Map_BottomLeft map_BL;
@@ -29,6 +30,8 @@ public class GameModel extends Observable implements Serializable{
 	private Map_TopRight map_TR;
 	private Map curMap;
 	private static final int BlockPixel = 16;
+	private static final ArrayList<Double> EncounterThresholdList = new ArrayList<Double>();
+	private double encounterRate = 0.2;
 	
 	// game information
 	private Mission mission;
@@ -125,7 +128,18 @@ public class GameModel extends Observable implements Serializable{
 		map_BR = new Map_BottomRight();
 		map_TL = new Map_TopLeft();
 		map_TR = new Map_TopRight();
+		generateEncounterThresholdList();
 	}	
+	
+	private void generateEncounterThresholdList(){
+		EncounterThresholdList.add(PokemonQuality.COMMON.getEncounterRate());
+		EncounterThresholdList.add(PokemonQuality.UNCOMMON.getEncounterRate() + EncounterThresholdList.get(0));
+		EncounterThresholdList.add(PokemonQuality.RARE.getEncounterRate() + EncounterThresholdList.get(1));
+		EncounterThresholdList.add(PokemonQuality.EPIC.getEncounterRate() + EncounterThresholdList.get(2));
+		EncounterThresholdList.add(PokemonQuality.LEGENDARY.getEncounterRate() + EncounterThresholdList.get(3));
+		
+		System.out.println(EncounterThresholdList.toString());
+	}
 	
 	// set the coordinate of the trainer
 	public void setLocation(int x, int y){
@@ -198,6 +212,7 @@ public class GameModel extends Observable implements Serializable{
 			p.setLocation(nextX, nextY);						
 			changeMap(curMap, p);
 		}	
+		*/
 		// encounter pokemon
 		else if (curMap.getBlock(nextX, nextY).getPassType() != PassableType.AIR){
 			// count step
@@ -207,8 +222,7 @@ public class GameModel extends Observable implements Serializable{
 			update();
 			// call the pokemon encounter
 			pokemonEncounter();
-		}	
-		*/	
+		}		
 		else{
 			setLocation(nextX, nextY);
 			curTrainer.incrementStep(1);
@@ -217,14 +231,35 @@ public class GameModel extends Observable implements Serializable{
 		update();
 	}
 	
-	/*
+	// Algorithm to encounter a pokemon when moving upon area that could met a pokemon
+	
 	public void pokemonEncounter(){
-		// TODO: algorithm to encounter pokemon
-		// 		Might need to change the view
+		// roll the dice to see if encounter a pokemon
+		// if not encounter return with nothing
+		if (Math.random() > 0.2){
+			return;
+		}
+		// encounter the pokemon
+		else{
+			// row the dice to see what quality of pokemon will encounter
+			double rate = Math.random();
+			
+			// encounter common
+			if (rate >= 0 && rate < EncounterThresholdList.get(0)){
+				
+			}
+			else if (rate >= 0.5 && rate < 0.75){
+				
+			}
+			else if (rate >= PokemonQuality.UNCOMMON.getEncounterRate() && rate <PokemonQuality.RARE.getEncounterRate()){
+				
+			}
+			
+		}
 		
-		return;
+		
 	}
-	*/
+
 	
 	// TODO: The following part will be done for iterator 2
 	/*
