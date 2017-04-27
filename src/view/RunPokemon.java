@@ -137,8 +137,7 @@ public class RunPokemon extends JFrame {
 				setUpPokemonTable();
 				setUpUseItemButton();
 				addObservers();
-				battlePanel.startBattle();
-				setViewTo(battlePanel);	// default starting view
+				setViewTo(mainGamePanel);	// default starting view
 	}
 	
 	private void setViewTo(JPanel newView) {

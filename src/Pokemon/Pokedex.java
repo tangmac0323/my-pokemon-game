@@ -16,6 +16,8 @@
 
 package Pokemon;
 
+import java.util.ArrayList;
+
 public enum Pokedex {
 	Caterpie("Caterpie", 10, PokemonQuality.COMMON, 100), 
 	Weedle("Weedle", 13, PokemonQuality.COMMON, 100), 
@@ -36,14 +38,14 @@ public enum Pokedex {
 	private final int pokedexIndex;		// store the index of the pokemon in pokedex
 	private final PokemonQuality quality;		// store the quality of the pokemon
 	private final int basicHP;		// store the basic HP of this kind
-	
+		
 	Pokedex(String name, int tag, PokemonQuality q, int hp){
 		this.name = name;
 		this.pokedexIndex = tag;
 		this.quality = q;
 		this.basicHP = hp;
 	}
-	
+		
 	public String getName(){
 		return this.name;
 	}
