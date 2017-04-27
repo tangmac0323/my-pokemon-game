@@ -21,7 +21,8 @@ public class GameModel extends Observable implements Serializable{
 	private int yCoords;
 	private int xPrevCoords;
 	private int yPrevCoords;
-	private Pokemon curEncounterPokemon = new Abra("HQY");
+	
+	private Pokemon curEncounterPokemon = null;
 	
 	// map information
 	private Map_BottomLeft map_BL;
@@ -206,7 +207,7 @@ public class GameModel extends Observable implements Serializable{
 			p.setLocation(nextX, nextY);						
 			changeMap(curMap, p);
 		}	
-		*/
+		
 		// encounter pokemon
 		else if (curMap.getBlock(nextX, nextY).getPassType() != PassableType.AIR){
 			// count step
@@ -216,10 +217,12 @@ public class GameModel extends Observable implements Serializable{
 			update();
 			// call the pokemon encounter
 			pokemonEncounter();
-		}		
+		}
+		*/		
 		else{
 			setLocation(nextX, nextY);
 			curTrainer.incrementStep(1);
+			pokemonEncounter();
 		}
 		
 		update();
@@ -230,7 +233,7 @@ public class GameModel extends Observable implements Serializable{
 	public void pokemonEncounter(){
 		// roll the dice to see if encounter a pokemon
 		// if not encounter return with nothing
-		if (Math.random() > 0.2){
+		if (Math.random() > encounterRate){
 			return;
 		}
 		// encounter the pokemon
@@ -242,10 +245,16 @@ public class GameModel extends Observable implements Serializable{
 			if (rate >= 0 && rate < EncounterThresholdList.get(0)){
 				
 			}
-			else if (rate >= 0.5 && rate < 0.75){
+			else if (rate >= EncounterThresholdList.get(0) && rate < EncounterThresholdList.get(1)){
 				
 			}
-			else if (rate >= PokemonQuality.UNCOMMON.getEncounterRate() && rate <PokemonQuality.RARE.getEncounterRate()){
+			else if (rate >= EncounterThresholdList.get(1) && rate < EncounterThresholdList.get(2)){
+				
+			}
+			else if (rate >= EncounterThresholdList.get(2) && rate < EncounterThresholdList.get(3)){
+				
+			}
+			else{
 				
 			}
 			
