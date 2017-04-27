@@ -10,9 +10,9 @@ public class CapturePotion extends Item{
 	}
 
 	@Override
-	public void useItem(Trainer trainer) {
+	public void useItem(Object object) {
 		this.decrement(1);
-		trainer.incrementBonusCapture(this.alteredChance);
+		((Trainer) object).incrementBonusCapture(this.alteredChance);
 	}
 
 	@Override

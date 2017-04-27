@@ -31,21 +31,25 @@ public class MainGameView extends JPanel implements Observer{
 	private BufferedImage treeSheet;
 	private BufferedImage trainerSheet;
 	
+
+	
 	// declare drawing coords
 	private Point finalLocation;
 	private Point curLocation;
 	private Point trainerOnMap;
 	private Point centerOnMap;
 	private GameModel model;
+	
+	// declare timer detail and animation detail
+	public final static int delayInMillis = 25;
 	private static final double PixelPerFrame = 2;
+	public final static int framePerMove = 8;
 	private static final int VisionRadius = 20;	// define the vision of the trainer on the map
 	
 	// constructor
 	public MainGameView(){
 		loadImages();
 		repaint();
-		//curLocation = model.getLocation();
-		//System.out.println("Initiate the view");
 	}
 		
 	// draw the map
@@ -95,6 +99,7 @@ public class MainGameView extends JPanel implements Observer{
 			// declare the draw panel coordinates
 			x = 0;
 			y = 0;
+			
 			// draw obstacle
 			for (int i = startX; i <= startX + VisionRadius * 2; i++, x++){
 				for (int j = startY; j <= startY + VisionRadius * 2; j++, y++){
@@ -115,31 +120,16 @@ public class MainGameView extends JPanel implements Observer{
 			x = 0;
 			y = 0;
 			
+			/*
 			// re-draw the trainer if there is an obstacle upon it
 			if (model.getCurMap().getBlock(finalLocation.x, finalLocation.y - 1).getObstacle() != ObstacleType.NONE){
 				g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
-				// TODO: Trying to solve the issue that some trees are blocked
-				/*
-				// redraw the tree
-				if (model.getCurMap().getBlock(finalLocation.x, finalLocation.y + 1).getObstacle() == ObstacleType.TREE){
-					BufferedImage tempTreeImg = treeSheet.getSubimage(Tree_Small_A_OFFSET_X, Tree_Small_A_OFFSET_Y, 
-							Tree_Small_A_Width, Tree_Small_A_Height);
-					g2.drawImage(tempTreeImg, finalLocation.x*MapBlockSize, (finalLocation.y + 1)*MapBlockSize, null);
-				}
-				*/
+
 			}
 			else if (model.getCurMap().getBlock(curLocation.x, curLocation.y - 1).getObstacle() != ObstacleType.NONE){
 				g2.drawImage(drawTrainer(), trainerOnMap.x, trainerOnMap.y, null);	
-				// TODO: Trying to solve the issue that some trees are blocked
-				/*
-				// redraw the tree
-				if (model.getCurMap().getBlock(curLocation.x, curLocation.y + 1).getObstacle() == ObstacleType.TREE){
-					BufferedImage tempTreeImg = treeSheet.getSubimage(Tree_Small_A_OFFSET_X, Tree_Small_A_OFFSET_Y, 
-							Tree_Small_A_Width, Tree_Small_A_Height);
-					g2.drawImage(tempTreeImg, finalLocation.x*MapBlockSize, (curLocation.y + 1)*MapBlockSize, null);
-				}
-				*/
 			}
+			*/
 		}
 	}
 	
@@ -206,12 +196,12 @@ public class MainGameView extends JPanel implements Observer{
 		return p;
 	}
 	
-	/////////////////////// Timer ///////////////////////////////////
+	/***************************** Timer *************************************/
 	private Timer timer;
 	private int counter;
 	
 	private void startTimer() {
-		timer = new Timer(100, new TimerListener());
+		timer = new Timer(delayInMillis, new TimerListener());
 		timer.start();
 	}
 	
@@ -219,21 +209,21 @@ public class MainGameView extends JPanel implements Observer{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (counter < 4 ){
+			if (counter < framePerMove ){
 				counter++;
 				// update current location 
 				// Check direction
 				if (model.getDir() == Direction.EAST){
-					trainerOnMap.setLocation(trainerOnMap.x + 4, trainerOnMap.y);
+					trainerOnMap.setLocation(trainerOnMap.x + PixelPerFrame, trainerOnMap.y);
 				}
 				else if (model.getDir() == Direction.WEST){
-					trainerOnMap.setLocation(trainerOnMap.x - 4, trainerOnMap.y);
+					trainerOnMap.setLocation(trainerOnMap.x - PixelPerFrame, trainerOnMap.y);
 				}
 				else if (model.getDir() == Direction.SOUTH){
-					trainerOnMap.setLocation(trainerOnMap.x, trainerOnMap.y + 4);
+					trainerOnMap.setLocation(trainerOnMap.x, trainerOnMap.y + PixelPerFrame);
 				}
 				else{
-					trainerOnMap.setLocation(trainerOnMap.x, trainerOnMap.y - 4);
+					trainerOnMap.setLocation(trainerOnMap.x, trainerOnMap.y - PixelPerFrame);
 				}	
 				repaint();
 			}
@@ -258,14 +248,11 @@ public class MainGameView extends JPanel implements Observer{
 		}
 		this.counter = 0; // initialize counter
 		startTimer();
-
-
 	}
 	
 	@Override
 	public void update(Observable o, Object arg) {
 		model = (GameModel) o;
-		//curLocation = model.getLocation();
 		curLocation = model.getPrevLocation();
 		finalLocation = model.getLocation();
 		trainerOnMap = findTrainerLocation();

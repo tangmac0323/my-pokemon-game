@@ -21,7 +21,7 @@ public enum PokemonQuality {
 	private final double runChance;
 	private final int maxTurn;
 	
-	PokemonQuality(int capRate, int maxTurn){
+	private PokemonQuality(int capRate, int maxTurn){
 		this.basicCaptureRate = capRate * 0.01;
 		this.runChance = runGenerator(capRate);
 		this.maxTurn = maxTurn;

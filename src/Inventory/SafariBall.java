@@ -16,7 +16,7 @@ public class SafariBall extends Item{
 	}
 
 	@Override
-	public void useItem(Trainer trainer) {
+	public void useItem(Object object) {
 		this.decrement(1);
 	}
 

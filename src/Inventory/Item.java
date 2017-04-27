@@ -23,7 +23,7 @@ public abstract class Item implements Serializable{
 		this.type = type;
 	}
 	
-	public abstract void useItem(Trainer trainer);
+	public abstract void useItem(Object object);
 		
 	public abstract String getInfo();
 	

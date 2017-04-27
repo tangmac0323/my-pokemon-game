@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -20,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -49,21 +52,28 @@ public class RunPokemon extends JFrame {
 	private JTable inventoryTable;
 	private JTable pokemonTable;
 	private JButton useItemButton;
+	private JPanel currentView;
 	
-	// declare the view
-	private MainGameView mainGamePanel;
+	// declare the main game view
+	private static MainGameView mainGamePanel;
 	private final static int DefaultGameHeight = 16 * 41;
 	private final static int DefaultGameWidth = 16 * 41;
 	
+	// declare the battle view
+	private static BattleView battlePanel;
+	private final static int DefaultBattleHeight = 320;
+	private final static int DefaultBattleWidth = 480;
+	
 	// declare timer detail
-	private Timer timer;
-	public final static int delayInMillis = 100;
+	public final static int delayInMillis = 25;
+	public final static int framePerMove = 8;
 	
 	// declare game variable
 	private GameModel gameModel;
-	private boolean isOver;
-	private boolean isWin;
-	private boolean isLost;
+	private boolean isOver;		// flag to check if the game is over
+	private boolean isWin;		// flag to check if the game is win
+	private boolean isLost;		// flag to check if the game is lost
+	private boolean isBattle;	// flag to check if it was doing battle
 	
 	// main function
 	public static void main(String[] args) {
@@ -115,9 +125,10 @@ public class RunPokemon extends JFrame {
 		//timer = new Timer(delayInMillis, new MoveListener());
 		//timer.start();
 	}
-	
+		
 	private void initiatePokemonGame(){
 				setUpMainWindow();
+				setUpBattleView();
 				setUpGameView();		
 				addEventListener();
 				setUpInfoBoard();
@@ -125,18 +136,40 @@ public class RunPokemon extends JFrame {
 				setUpInventory();
 				setUpPokemonTable();
 				setUpUseItemButton();
-				//System.out.println("GUI set up completed");
+				addObservers();
+				battlePanel.startBattle();
+				setViewTo(battlePanel);	// default starting view
+	}
+	
+	private void setViewTo(JPanel newView) {
+		if (currentView != null){
+			remove(currentView);
+		}
+		currentView = newView;
+		add(currentView);
+		gameModel.update();
+		currentView.repaint();
+		validate();
+	}
+	
+	// user prompt to choose mission
+	private void setUpMission(){
+		// TODO: mission
 	}
 	
 	public void setUpMainWindow(){
 		// define the location of the main window
-		this.setTitle("Pokemon Safari Zone - Alpha v0.1");
+		this.setTitle("Pokemon Safari Zone - Alpha v0.5");
 		this.setSize(DefaultHeight, DefaultWidth);
 		this.setLocationRelativeTo(null); 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setFocusable(true);
-		
+	}
+
+	private void addObservers() {
+		gameModel.addObserver(mainGamePanel);
+		gameModel.addObserver(battlePanel);
 	}
 	
 	public void setUpGameView(){
@@ -147,9 +180,19 @@ public class RunPokemon extends JFrame {
 		mainGamePanel.setBackground(Color.WHITE);
 		Border gameBorder = new LineBorder(Color.BLACK, 2, true);
 		mainGamePanel.setBorder(gameBorder);
-		this.add(mainGamePanel);
-		gameModel.addObserver(mainGamePanel);
-		gameModel.update();
+		mainGamePanel.addComponentListener(new viewChangeListener());
+	}
+	
+	// setUpBattleView
+	private void setUpBattleView(){
+		// set up the main game model
+		battlePanel = new BattleView();
+		battlePanel.setSize(DefaultBattleWidth, DefaultBattleHeight);
+		battlePanel.setLocation(25, 25);
+		battlePanel.setBackground(Color.WHITE);
+		Border gameBorder = new LineBorder(Color.BLACK, 2, true);
+		battlePanel.setBorder(gameBorder);
+		battlePanel.addComponentListener(new viewChangeListener());
 	}
 	
 	public void addEventListener(){
@@ -200,7 +243,7 @@ public class RunPokemon extends JFrame {
 		useItemButton.setBounds(720 + 305, 220, 100, 37);
 		useItemButton.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		getContentPane().add(useItemButton);
-		//useItemButton.addActionListener(new useItemButtonListener());
+		useItemButton.addActionListener(new useItemButtonListener());
 	}
 	
 	
@@ -258,7 +301,7 @@ public class RunPokemon extends JFrame {
 		}
 	}
 		
-	// add the button listener for the item button
+	// add the button listener for using the item button
 	private class useItemButtonListener implements ActionListener {
 
 		@Override
@@ -266,9 +309,33 @@ public class RunPokemon extends JFrame {
 			String text = ((JButton) e.getSource()).getText();
 			if (text.equals("Use Item")){
 				int index = inventoryTable.convertRowIndexToModel(inventoryTable.getSelectedRow());
+				
+				//System.out.println("Select row: " + index);
+				//System.out.println("Use Item: " + gameModel.getTrainer().getInventory().getValueAt(index, 0));
+				//System.out.println("Item Quantity: " + gameModel.getTrainer().getInventory().getValueAt(index, 1));
+				
+				// TODO: add a pop-up dialog to ask user who to use the item
+				
+				gameModel.getTrainer().useItem(index);
+				System.out.println("User stepcount: " + gameModel.getTrainer().getStepCount());
+				
+				// update the information table
+				updateInfoBoard();
+				
+				// update the invertory table
+				inventoryTable.repaint();
 			}
 		}
 		
+	}
+	
+	// update the information board
+	private void updateInfoBoard(){
+		// update infoboard
+		missionBoard.setText("<html>Mission Statistic:<br>" 
+					+ "&nbsp;&nbsp;&nbsp;Step Count: " + gameModel.getStepCount() + " / " + gameModel.getMission().getStepCap() + "<br>"
+					+ "&nbsp;&nbsp;&nbsp;Total Pokemon Count: " + gameModel.getTrainer().getPokemonCollection().getSize() + " / " + gameModel.getMission().getTotalRequirement() + "</html>");
+		this.requestFocus();
 	}
 	
 	// add the button listener for the item detail button
@@ -281,19 +348,31 @@ public class RunPokemon extends JFrame {
 		}
 		
 	}
-	
 
+	/***************************** Movement Control *********************************/
+		
 	// key board listener
-		private class myKeyListener implements KeyListener {
+	private class myKeyListener implements KeyListener {
+		
+		///////// MovementTimer /////////
+		private Timer moveTimer;
+		private int moveCounter = 0;
+		
+		private void startTimer() {
+			moveTimer = new Timer(delayInMillis, new movementTimerListener());
+			moveTimer.start();
+		}
+		
+		private boolean isPressing = false;
+		private boolean isActive = true;	// flag for the continue of the while loop
 
-			@Override
-			public void keyPressed(KeyEvent key) {	
-
-			}
-
-			@Override
-			public void keyReleased(KeyEvent key) {
-				if (!isOver){
+		@Override
+		public void keyPressed(KeyEvent key) {
+			isPressing = true;
+			if (isPressing){
+				// loop to check if the key was loose or the game is over or the timer stop
+				while (isPressing && !isOver && isActive){
+					isActive = false;
 					if (key.getKeyCode() == KeyEvent.VK_UP) {
 						gameModel.moveTrainer(Direction.NORTH);
 					}
@@ -308,26 +387,74 @@ public class RunPokemon extends JFrame {
 					}
 					gameModel.setLocation(gameModel.getLocation().x, gameModel.getLocation().y);
 					// update infoboard
-					missionBoard.setText("<html>Mission Statistic:<br>" 
-								+ "&nbsp;&nbsp;&nbsp;Step Count: " + gameModel.getStepCount() + " / " + gameModel.getMission().getStepCap() + "<br>"
-								+ "&nbsp;&nbsp;&nbsp;Total Pokemon Count: " + gameModel.getTrainer().getPokemonCollection().getSize() + " / " + gameModel.getMission().getTotalRequirement() + "</html>");
-					//mainGamePanel.requestFocus();
-					//System.out.println("New location: " + gameModel.getLocation());	
-					
-					//System.out.println("Hehe");
+					updateInfoBoard();
 					// check win/lost
 					checkGameResult();
+					
+					startTimer();
 				}
-
 			}
+
+
+		}
+
+		@Override
+		public void keyReleased(KeyEvent key) {
+			isPressing = false;
+			/*
+			if (!isOver){
+				if (key.getKeyCode() == KeyEvent.VK_UP) {
+					gameModel.moveTrainer(Direction.NORTH);
+				}
+				if (key.getKeyCode() == KeyEvent.VK_DOWN) {
+					gameModel.moveTrainer(Direction.SOUTH);
+				}
+				if (key.getKeyCode() == KeyEvent.VK_LEFT) {
+					gameModel.moveTrainer(Direction.WEST);
+				}
+				if (key.getKeyCode() == KeyEvent.VK_RIGHT) {
+					gameModel.moveTrainer(Direction.EAST);
+				}
+				gameModel.setLocation(gameModel.getLocation().x, gameModel.getLocation().y);
+				// update infoboard
+				updateInfoBoard();
+				//mainGamePanel.requestFocus();
+				//System.out.println("New location: " + gameModel.getLocation());	
+				
+				//System.out.println("Hehe");
+				// check win/lost
+				checkGameResult();
+			}
+			*/
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}		
+		
+		// timer listener for the key listener
+		private class movementTimerListener implements ActionListener {
 
 			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void actionPerformed(ActionEvent arg0) {
+				if (moveCounter < framePerMove ){
+					moveCounter++;
+				}
+				else{
+					moveTimer.stop();
+					isActive = true;
+					moveCounter = 0;
+				}
 			}
+
 			
 		}
+		
+		
+	}
 	
 		
 	// set up for the window on exit
@@ -399,6 +526,34 @@ public class RunPokemon extends JFrame {
 			isLost = true;
 			isOver = true;
 		}
+	}
+	
+	public class viewChangeListener implements ComponentListener {
+
+		@Override
+		public void componentHidden(ComponentEvent e) {
+			if (e.getComponent().getClass() == BattleView.class){
+				setViewTo(mainGamePanel);
+			}
+		}
+
+		@Override
+		public void componentMoved(ComponentEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentResized(ComponentEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e) {
+						
+		}
+		
 	}
 	
 }

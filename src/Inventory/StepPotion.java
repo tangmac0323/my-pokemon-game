@@ -12,13 +12,13 @@ public class StepPotion extends Item{
 	
 	@Override
 	public String getInfo() {
-		return "restore" + this.restoreAmount + "step count";
+		return "restore " + this.restoreAmount + " step count";
 	}
 
 	@Override
-	public void useItem(Trainer trainer) {
+	public void useItem(Object object) {
 		this.decrement(1);
-		trainer.incrementStep(this.restoreAmount);
+		((Trainer) object).decrementStep(this.restoreAmount);
 	}
 
 }

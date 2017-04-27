@@ -23,6 +23,19 @@ public class ItemCollection implements TableModel, Serializable{
 		addItem(ItemType.BALL);
 		
 	}
+	
+	// use the selected item
+	public void useItem(int index, Object object){
+		itemList.get(index).useItem((Trainer) object);
+		// check the number of the item, remove it if it is zero
+		if (itemList.get(index).getCount() == 0){
+			itemList.remove(index);
+		}
+	}
+	
+	public ItemType getItemType(int index){
+		return itemList.get(index).getType();
+	}
 		
 	public void addItem(ItemType type){
 		// increase the count for the item
