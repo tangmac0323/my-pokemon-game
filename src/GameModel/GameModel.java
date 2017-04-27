@@ -93,13 +93,7 @@ public class GameModel extends Observable implements Serializable{
 	public Mission getMission(){
 		return this.mission;
 	}
-	
-	/*
-	public int getPixel(){
-		return this.BlockPixel;
-	}
-	*/
-	
+		
 	public Direction getDir(){
 		return curTrainer.getFaceDir();
 	}
