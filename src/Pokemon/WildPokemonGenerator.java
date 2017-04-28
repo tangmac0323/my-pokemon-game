@@ -99,7 +99,7 @@ public class WildPokemonGenerator implements Serializable{
 		EncounterThresholdList.add(PokemonQuality.EPIC.getEncounterRate() + EncounterThresholdList.get(2));
 		EncounterThresholdList.add(PokemonQuality.LEGENDARY.getEncounterRate() + EncounterThresholdList.get(3));
 		
-		System.out.println(EncounterThresholdList.toString());
+		//System.out.println(EncounterThresholdList.toString());
 	}
 		
 	public Object getCommon(){

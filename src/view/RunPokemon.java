@@ -36,6 +36,7 @@ import javax.swing.table.TableRowSorter;
 
 import GameModel.Direction;
 import GameModel.GameModel;
+import Inventory.ItemType;
 import Mission.Mission;
 import Mission.MissionType;
 
@@ -181,6 +182,7 @@ public class RunPokemon extends JFrame {
 		Border gameBorder = new LineBorder(Color.BLACK, 2, true);
 		mainGamePanel.setBorder(gameBorder);
 		mainGamePanel.addComponentListener(new viewChangeListener());
+		mainGamePanel.setFocusable(true);
 	}
 	
 	// setUpBattleView
@@ -193,6 +195,7 @@ public class RunPokemon extends JFrame {
 		Border gameBorder = new LineBorder(Color.BLACK, 2, true);
 		battlePanel.setBorder(gameBorder);
 		battlePanel.addComponentListener(new viewChangeListener());
+		battlePanel.setFocusable(true);
 	}
 	
 	public void addEventListener(){
@@ -307,7 +310,7 @@ public class RunPokemon extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String text = ((JButton) e.getSource()).getText();
-			if (text.equals("Use Item")){
+			if (text.equals("Use Item") && currentView.getClass() == MainGameView.class){
 				// check if there is any row selected
 				if (inventoryTable.getSelectionModel().isSelectionEmpty()){
 					return;
@@ -316,15 +319,37 @@ public class RunPokemon extends JFrame {
 				// interact with the selected row
 				int index = inventoryTable.convertRowIndexToModel(inventoryTable.getSelectedRow());
 				
-				//System.out.println("Select row: " + index);
-				//System.out.println("Use Item: " + gameModel.getTrainer().getInventory().getValueAt(index, 0));
-				//System.out.println("Item Quantity: " + gameModel.getTrainer().getInventory().getValueAt(index, 1));
+				gameModel.getTrainer().useItem(index, gameModel.getTrainer());
 				
-				// TODO: add a pop-up dialog to ask user who to use the item
+				// update the information table
+				updateInfoBoard();
 				
-				gameModel.getTrainer().useItem(index);
-				System.out.println("User stepcount: " + gameModel.getTrainer().getStepCount());
+				// update the invertory table
+				inventoryTable.repaint();
+			}
+			else if (text.equals("Use Item") && currentView.getClass() == BattleView.class){
+				//System.out.println("Using Item during Battle");
 				
+				// check if there is any row selected
+				if (inventoryTable.getSelectionModel().isSelectionEmpty()){
+					return;
+				}
+				// interact with the selected row
+				int index = inventoryTable.convertRowIndexToModel(inventoryTable.getSelectedRow());
+				//System.out.println("Using Item at row: " + index);
+				
+				// use the item
+				if (gameModel.getTrainer().getCurEncounterPokemon() != null ){
+					ItemType type = gameModel.getTrainer().getInventory().getItemType(index);
+					
+					//System.out.println(gameModel.getTrainer().getCurEncounterPokemon().getClass());
+					
+					gameModel.getTrainer().useItem(index, gameModel.getTrainer().getCurEncounterPokemon());
+					gameModel.updateBattleView(type);
+					//System.out.println(gameModel.getTrainer().getCurEncounterPokemon().getClass());
+					//gameModel.useItem(index, gameModel.getTrainer().getCurEncounterPokemon());
+				}
+				//System.out.println("Upadating Table");
 				// update the information table
 				updateInfoBoard();
 				
@@ -408,32 +433,6 @@ public class RunPokemon extends JFrame {
 		@Override
 		public void keyReleased(KeyEvent key) {
 			isPressing = false;
-			/*
-			if (!isOver){
-				if (key.getKeyCode() == KeyEvent.VK_UP) {
-					gameModel.moveTrainer(Direction.NORTH);
-				}
-				if (key.getKeyCode() == KeyEvent.VK_DOWN) {
-					gameModel.moveTrainer(Direction.SOUTH);
-				}
-				if (key.getKeyCode() == KeyEvent.VK_LEFT) {
-					gameModel.moveTrainer(Direction.WEST);
-				}
-				if (key.getKeyCode() == KeyEvent.VK_RIGHT) {
-					gameModel.moveTrainer(Direction.EAST);
-				}
-				gameModel.setLocation(gameModel.getLocation().x, gameModel.getLocation().y);
-				// update infoboard
-				updateInfoBoard();
-				//mainGamePanel.requestFocus();
-				//System.out.println("New location: " + gameModel.getLocation());	
-				
-				//System.out.println("Hehe");
-				// check win/lost
-				checkGameResult();
-			}
-			*/
-
 		}
 
 		@Override
@@ -462,11 +461,7 @@ public class RunPokemon extends JFrame {
 					}
 				}
 			}
-
-			
 		}
-		
-		
 	}
 	
 		

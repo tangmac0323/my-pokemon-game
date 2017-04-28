@@ -144,6 +144,11 @@ public class GameModel extends Observable implements Serializable{
 		super.notifyObservers();
 	}
 	
+	public void updateBattleView(ItemType type){
+		super.setChanged();
+		super.notifyObservers(type);
+	}
+	
 	// move the trainer
 	public void moveTrainer(Direction dir){
 		// change direction first
@@ -259,10 +264,14 @@ public class GameModel extends Observable implements Serializable{
 		return this.curTrainer;
 	}
 	
+	/*
 	// call by the user to use an item
-	public void useItem(int index){
-		notifyObservers(curTrainer.getInventory().getItemType(index));
-		this.curTrainer.useItem(index);
+	public void useItem(int index, Object object){
+		ItemType type = curTrainer.getInventory().getItemType(index);
+		System.out.println(type.getClass());
+		this.curTrainer.useItem(index, object);
 		setChanged();
+		notifyObservers(type);
 	}
+	*/
 }

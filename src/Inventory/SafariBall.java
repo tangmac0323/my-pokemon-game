@@ -4,7 +4,8 @@ import Trainer.Trainer;
 
 public class SafariBall extends Item{
 	
-	
+	private static final long serialVersionUID = -6527050440324754144L;
+
 	// constructor
 	public SafariBall(){
 		super("Safari Ball", ItemType.BALL);
