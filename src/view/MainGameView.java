@@ -45,6 +45,7 @@ public class MainGameView extends JPanel implements Observer{
 	private static final double PixelPerFrame = 2;
 	public final static int framePerMove = 8;
 	private static final int VisionRadius = 20;	// define the vision of the trainer on the map
+	//public boolean endMoving = true;
 	
 	// constructor
 	public MainGameView(){
@@ -202,6 +203,7 @@ public class MainGameView extends JPanel implements Observer{
 	
 	private void startTimer() {
 		timer = new Timer(delayInMillis, new TimerListener());
+		//endMoving = false;
 		timer.start();
 	}
 	
@@ -230,6 +232,7 @@ public class MainGameView extends JPanel implements Observer{
 			else{
 				timer.stop();
 				curLocation.setLocation(finalLocation);
+				//endMoving = true;
 				
 				// call the pokemon encounter
 				// avoid repeat encounter and set up the encountered pokemon

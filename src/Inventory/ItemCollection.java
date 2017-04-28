@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import Pokemon.Pokemon;
 import Trainer.Trainer;
 
 public class ItemCollection implements TableModel, Serializable{
@@ -26,7 +27,14 @@ public class ItemCollection implements TableModel, Serializable{
 	
 	// use the selected item
 	public void useItem(int index, Object object){
-		itemList.get(index).useItem((Trainer) object);
+		System.out.println(object.getClass());
+		if (object.getClass() == Trainer.class){
+			itemList.get(index).useItem((Trainer) object);
+		}
+		else if (Pokemon.class.isInstance(object)){
+			System.out.println("Using upon pokemon");
+			itemList.get(index).useItem((Pokemon) object);
+		}
 		// check the number of the item, remove it if it is zero
 		if (itemList.get(index).getCount() == 0){
 			itemList.remove(index);

@@ -153,7 +153,7 @@ public class Trainer implements Serializable{
 		return this.id;
 	}
 	
-	public void useItem(int index){
-		inventory.useItem(index, this);
+	public void useItem(int index, Object object){
+		inventory.useItem(index, object);
 	}
 }

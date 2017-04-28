@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -9,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,6 +22,7 @@ import GameModel.Direction;
 import GameModel.GameModel;
 import Inventory.ItemType;
 import Map.GroundType;
+import Pokemon.Pokedex;
 import Pokemon.Pokemon;
 
 public class BattleView extends JPanel implements Observer{
@@ -40,20 +43,33 @@ public class BattleView extends JPanel implements Observer{
 	
 	// combat pokemon information
 	private Pokemon curPokemon;	// current encountering pokemon
-	//private double curRunRate;	// current run rate of the pokemon
-	//private double curCapRate;	// current capture rate
-	//private int curMaxTurn;		// current maximum running turns
+
 	
 	// declare variables for animation
-	private boolean openingEnd = false;	// flag to check if the openning animation has been played
-	private boolean battleEnd = true;
+	private boolean openingStarted = false;	// flag to check if the openning animation has been played
+	private boolean itemUsingStarted = false;	// flag to check if using item animation started
+	private boolean battleEnd = true;	// flag to show that the battle is end
 	
-	public final static int delayInMillis = 25;
-	private static final double PixelPerFrame = 2;
-	public final static int framePerSec = 8;
+	private final static int delayInMillis = 15;
+	private final static double PixelPerFrame = 4;
+	private final static int MoveInPixel = 300;		// store the pixel that trainer and pokemon move in
+		
+	// location for the trainer on the battlefield
+	private final static int TrainerStartLocation_X = 429;
+	private int trainerMidLocation_X;
+	private int trainerMidLocation_Y;
+	private int trainerCurWidth;
+	private int trainerCurHeight;
+	
+	// location for the pokemon on the battlefield
+	private final static int PokemonStartLocation_X = 53;
+	private int pokemonMidLocation_X;
+	private int pokemonMidLocation_Y;
+	private int pokemonCurWidth;
+	private int pokemonCurHeight;
 	
 	private ItemType usingItem = null;
-	
+		
 	
 	// constructor
 	public BattleView(){
@@ -62,21 +78,47 @@ public class BattleView extends JPanel implements Observer{
 		repaint();
 		this.addMouseListener(new ClickListener());
 	}
-		
-	// draw the map
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		
-		Graphics2D g2 = (Graphics2D) g;
-		
-		// check the existence of model
-		if (model == null){
-			return;
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		if (battleEnd == false){
+			model = (GameModel) o;
+			
+			// play opening animation
+			if (!openingStarted){
+				openingStarted = true;
+				initData();
+				playOpeningAnimation();
+			}
+			
+			// play use item animation
+			if(arg != null && !itemUsingStarted){
+				// raise the item using flag
+				itemUsingStarted = true;
+				
+				usingItem = (ItemType) arg;
+				System.out.println(usingItem.getClass().getName());
+				// TODO: need item animation
+			}
+			
+			
+			repaint();
 		}
 		
-		// draw the back ground
-		g2.drawImage(drawBattleField(GroundType.GRASSLAND), 0, 0, null);
-		g2.drawImage(drawBattleMenu(), 0, BattleField_Height, null);
+	}
+			
+	// return the upper left point of the trainer
+	private Point getTrainerUpperLeft(){
+		Point p = new Point();
+		p.setLocation(trainerMidLocation_X - trainerCurWidth/2, trainerMidLocation_Y - trainerCurHeight);
+		return p;
+	}
+	
+	// return the upper left point of the pokemon
+	private Point getPokemonUpperLeft(){
+		Point p = new Point();
+		p.setLocation(pokemonMidLocation_X - pokemonCurWidth/2, pokemonMidLocation_Y - pokemonCurHeight);
+		return p;
 	}
 		
 	// initiate the data when the battle begin
@@ -84,58 +126,46 @@ public class BattleView extends JPanel implements Observer{
 		// initiate the data when construct it
 		if (model == null){
 			curPokemon = null;
-			//curRunRate = 0;
-			//curCapRate = 0;
-			//curMaxTurn = 0;
 			return;
 		}
-				
+		
+		resetData();
+		
 		// get the encountered pokemon
-		curPokemon = model.getTrainer().getCurEncounterPokemon();
+		setCurPokemon(model.getTrainer().getCurEncounterPokemon());
 		
 		// calcualte and set the data for pokemon basing on the trainer data
 		double bonusRunChance = model.getTrainer().getBonusRun();
 		double bonusCapRate = model.getTrainer().getBonusCapture();
 		int bonusTurn = model.getTrainer().getBonusTurn();
-		
-		//curRunRate = curPokemon.getBasicRunChance() + bonusRunChance;
-		//curCapRate = curPokemon.getBasicCapRate() + bonusCapRate;
-		//curMaxTurn = curPokemon.getBasicMaxTurn() + bonusTurn;
-		
+				
 		curPokemon.incrementCapRate(bonusCapRate);
 		curPokemon.decrementRunChance(bonusRunChance);
 		curPokemon.incrementMaxTurn(bonusTurn);
 	}
 	
+	// this will be called in initiation
+	private void resetData(){
+		usingItem = null;	// reset the using item
+		curTurn = 0;	// reset the turn count
+
+		// Date for the opening animation
+		// location for the trainer on the battlefield
+		trainerMidLocation_X = TrainerStartLocation_X; 
+		trainerMidLocation_Y = BattleField_Height;
+		// location for the pokemon on the battlefield
+		pokemonMidLocation_X = PokemonStartLocation_X;
+		pokemonMidLocation_Y = BattleField_Height - 60;
+	}
+		
 	public void setCurPokemon(Pokemon pokemon){
 		this.curPokemon = pokemon;
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		if (battleEnd == false){
-			model = (GameModel) o;
-			
-			// play use item animation
-			if(arg != null){
-				usingItem = (ItemType) arg;
-			}
-			
-			// play opening animation
-			if (!openingEnd){
-				openingEnd = true;
-				playOpeningAnimation();
-				initData();
-			}
-			
-			repaint();
-		}
-		
 	}
 	
 	public void startBattle(){
 		battleEnd = false;
-		openingEnd = false;
+		openingStarted = false;
+		
 	}
 	
 	private void endBattle(){
@@ -144,10 +174,8 @@ public class BattleView extends JPanel implements Observer{
 		model.setEncounteredThisBlock(false);
 	}
 	
-	private void playOpeningAnimation(){
-		// TODO: draw sequence of opening animation
-	}
 	
+		
 	// click on run set the visibility of the view and raise the end flag
 	private class ClickListener implements MouseListener {
 		private final static int RunButtonHeight = 30;
@@ -202,7 +230,17 @@ public class BattleView extends JPanel implements Observer{
 	 * *************************************** *
 	 */
 	
-	// define sprite sheet name
+	//////////////////////////// Draw Move In Animation /////////////////////////////
+	private boolean openingEnd = true;	// flag to check if the moving animation is over and enable the listener
+	public boolean InteractEnable(){
+		return openingEnd;
+	}
+	private void playOpeningAnimation(){
+		openingEnd = false;		
+		startMoveInTimer();
+	}
+	
+	/////////////////////////// Define sprite sheet name ///////////////////////////
 	private static final String pokemonTextureFileName = "pokemon_pokemons.png";
 	private static final String trainerTextureFileName = "pokemon_trainer.png";
 	private static final String effectTextureFileName = "pokemon_effect.png";
@@ -210,16 +248,18 @@ public class BattleView extends JPanel implements Observer{
 	private static final String hpBarFileName = "pokemon_hpbar.png";
 	private static final String battleFieldFileName = "pokemon_battle_field.png";
 	
-	private void loadImages(){
+	private final void loadImages(){
 		loadPokemonTexture();
 		loadTrainerTexture();
 		loadEffectTexture();
 		loadMenuTexture();
 		loadHpBarTexture();
 		loadBattleField();
+		generateOFFSETList();
 	}
 	
 	// function to load images sheet
+	
 	private void loadPokemonTexture() {
 		// try to open the file of pokemon textures
 		try{
@@ -230,9 +270,10 @@ public class BattleView extends JPanel implements Observer{
 		}
 		catch (IOException e){
 			System.out.println("Could not find: " + pokemonTextureFileName);
-		}	
+		}
+		
 	}
-	
+		
 	private void loadTrainerTexture() {
 		// try to open the file of trainer texture
 		try{
@@ -298,6 +339,49 @@ public class BattleView extends JPanel implements Observer{
 			System.out.println("Could not find: " + hpBarFileName);
 		}	
 	}
+
+
+	// define the upper left point for all pokemon on the sheet
+	private static ArrayList<Point> PokemonOFFSET_A;	// OFFSET list for pokemon first image
+	private static ArrayList<Point> PokemonOFFSET_B;	// OFFSET list for pokemon second image
+	
+	private final void generateOFFSETList(){
+		PokemonOFFSET_A = new ArrayList<Point>();
+		PokemonOFFSET_B = new ArrayList<Point>();
+		for (int i = 1; i <= 151; i++){
+			// get row number and col number for offset
+			int row = i / 5;
+			int col = i % 5;
+			if (col == 0){
+				col = 5;
+				row = row - 1;
+			}			
+			// calculate for offset 01
+			// create a new point object
+			Point p1 = new Point();
+			int x1 = 11 + 138 * (col * 2 - 2);
+			int y1 = 11 + 138 * row;
+			p1.setLocation(x1,  y1);
+			PokemonOFFSET_A.add(p1);
+			
+			// calculate for offset 02
+			// create a new point object
+			Point p2 = new Point();
+			int x2 = 11 + 138 * (col * 2 - 1);
+			int y2 = 11 + 138 * row;
+			p2.setLocation(x2,  y2);
+			PokemonOFFSET_B.add(p2);
+		}
+	}
+	
+	private Point getPokemonOFFSET_A(Pokedex type){
+		return PokemonOFFSET_A.get(type.getIndex() - 1);
+		
+	}
+	
+	private Point getPokemonOFFSET_B(Pokedex type){
+		return PokemonOFFSET_B.get(type.getIndex() - 1);
+	}
 	
 	
 	////////////////////// Draw Battle Field /////////////////////////////
@@ -345,24 +429,154 @@ public class BattleView extends JPanel implements Observer{
 	}
 	
 	
-	/********************* Timer **********************/
-	private Timer timer;
-	private int counter;
 	
-	private void startTimer() {
-		timer = new Timer(delayInMillis, new TimerListener());
-		timer.start();
-	}
+	////////////////////// Draw Trainer /////////////////////////////
+	private final static int Trainer_Height = 98;
 	
-	private class TimerListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+	private final static int Trainer_Steady_Width = 76;
+	private final static int Trainer_Throw01_Width = 128;
+	private final static int Trainer_Throw02_Width = 106;
+	private final static int Trainer_Throw03_Width = 132;
+	private final static int Trainer_Throw04_Width = 112;
+	
+	private final static int Trainer_OFFSET_Y = 365;
+	
+	private final static int Trainer_Steady_OFFSET_X = 51;
+	private final static int Trainer_Throw01_OFFSET_X = 143;
+	private final static int Trainer_Throw02_OFFSET_X = 271;
+	private final static int Trainer_Throw03_OFFSET_X = 398;
+	private final static int Trainer_Throw04_OFFSET_X = 529;
+	
+	private BufferedImage drawTrainer(){
+		// set the corresponding height
+		trainerCurHeight = Trainer_Height;
+		
+		// trainer remain steady during the movie in
+		if (!openingEnd){
+			// set the corresponding width
+			trainerCurWidth = Trainer_Steady_Width;
+			return trainerSheet.getSubimage(Trainer_Steady_OFFSET_X, Trainer_OFFSET_Y, 
+					Trainer_Steady_Width, Trainer_Height);
+		}
+		else{
+			return trainerSheet.getSubimage(Trainer_Steady_OFFSET_X, Trainer_OFFSET_Y, 
+					Trainer_Steady_Width, Trainer_Height);
 		}
 	}
 	
 	
+	////////////////////// Draw Pokemon /////////////////////////////
+	private final static int Pokemon_Height = 126;
+	private final static int Pokemon_Width = 126;
+	
+	private BufferedImage drawPokemon(Pokedex type){
+		pokemonCurHeight = Pokemon_Height;
+		pokemonCurWidth = Pokemon_Width;
+		
+		// pokemon remain steady during the movie in
+		// and scream at you at the end
+		if (!openingEnd){
+			if (moveInCounter > 50){
+				if (moveInCounter < 73){
+					return drawPokemonB(type);
+				}
+				else{
+					return drawPokemonA(type);
+				}
+			}
+			return drawPokemonA(type);
+		}
+		else{
+			return null;
+		}
+	}
+	
+	private BufferedImage drawPokemonA(Pokedex type){
+		// get the offset point
+		Point p = this.getPokemonOFFSET_A(type);
+		return pokemonSheet.getSubimage(p.x, p.y, 
+				Pokemon_Width, Pokemon_Height);
+	}
+	
+	private BufferedImage drawPokemonB(Pokedex type){
+		// get the offset point
+		Point p = this.getPokemonOFFSET_B(type);
+		return pokemonSheet.getSubimage(p.x, p.y, 
+				Pokemon_Width, Pokemon_Height);
+	}
+	
+		
+	/********************* Timer **********************/
+	///////////////// Move In Timer //////////////////
+	private Timer moveInTimer;
+	private int moveInCounter;
+	
+	private void startMoveInTimer() {
+		moveInCounter = 0;
+		moveInTimer = new Timer(delayInMillis, new moveInTimerListener());
+		moveInTimer.start();
+	}
+	
+	private class moveInTimerListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			//System.out.println(moveInCounter + "");
+			
+			if (moveInCounter < MoveInPixel/PixelPerFrame){
+				moveInCounter++;
+				// set the location of the trainer and the pokemon
+				trainerMidLocation_X -= PixelPerFrame;
+				
+				// pokemon move in later
+				if (moveInCounter < 50){
+					pokemonMidLocation_X += (int)(PixelPerFrame * 1.5);
+				}
+				repaint();
+			}
+			else{
+				openingEnd = true;
+				moveInTimer.stop();
+				moveInCounter = 0;
+			}
+			
+		}
+	}
+	
+	// draw the battle
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		
+		Graphics2D g2 = (Graphics2D) g;
+		
+		// check the existence of model
+		if (model == null){
+			return;
+		}
+		
+		// draw the back ground
+		g2.drawImage(drawBattleField(GroundType.GRASSLAND), 0, 0, null);
+		g2.drawImage(drawBattleMenu(), 0, BattleField_Height, null);
+		
+		// check if the openning animation has end
+		// draw the move in trainer and pokemon
+		if (openingStarted && !openingEnd){
+			//System.out.println("Counter: " + moveInCounter + ",  Trainer Drawing at: " + getTrainerUpperLeft().x + ", " + getTrainerUpperLeft().y);
+			
+			// pokemon move in later
+			if (moveInCounter > 5){
+				g2.drawImage(drawPokemon(curPokemon.getSpecy()), getPokemonUpperLeft().x, getPokemonUpperLeft().y, null);
+				//System.out.println("Counter: " + moveInCounter + ",  Pokemon Drawing at: " + getPokemonUpperLeft().x + ", " + getPokemonUpperLeft().y +
+						//",  " + curPokemon.getSpecy().getName());
+			}
+			g2.drawImage(drawTrainer(), getTrainerUpperLeft().x, getTrainerUpperLeft().y, null);
+			
+		}
+		else{
+			g2.drawImage(drawTrainer(), getTrainerUpperLeft().x, getTrainerUpperLeft().y, null);
+			g2.drawImage(drawPokemonA(curPokemon.getSpecy()), getPokemonUpperLeft().x, getPokemonUpperLeft().y, null);
+		}
+	}
 
 }
