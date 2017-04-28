@@ -18,6 +18,8 @@ public class WildPokemonGenerator implements Serializable{
 	
 	private static WildPokemonGenerator uniqueInstance;
 	
+	private static ArrayList<Double> EncounterThresholdList;
+	
 	public static WildPokemonGenerator getInstance(){
 		if (uniqueInstance == null){
 			uniqueInstance = new WildPokemonGenerator();
@@ -27,14 +29,48 @@ public class WildPokemonGenerator implements Serializable{
 	}
 	
 	// constructor to initiate the list
-	private WildPokemonGenerator() {
+	private WildPokemonGenerator() {			
+		// build the list
+		buildPokedexList();
+		
+		// generate threshold list
+		generateEncounterThresholdList();
+	}
+	
+	public Pokemon generatePokemon(){
+		// row the dice to see what quality of pokemon will encounter
+		double rate = Math.random();
+					
+		// encounter common
+		if (rate >= 0 && rate < EncounterThresholdList.get(0)){
+			return (Pokemon) this.getCommon();
+		}
+		// encoutner uncommon
+		else if (rate >= EncounterThresholdList.get(0) && rate < EncounterThresholdList.get(1)){
+			return (Pokemon) this.getUncommon();
+		}
+		// encounter rare
+		else if (rate >= EncounterThresholdList.get(1) && rate < EncounterThresholdList.get(2)){		
+			return (Pokemon) this.getRare();
+		}
+		//encounter epic
+		else if (rate >= EncounterThresholdList.get(2) && rate < EncounterThresholdList.get(3)){			
+			return (Pokemon) this.getEpic();
+		}
+		// encounter legendary
+		else{				
+			return (Pokemon) this.getLegend();
+		}		
+	}
+	
+	// build the pokedex list
+	private final void buildPokedexList(){
 		CommonPokedexList = new ArrayList<Pokedex>();
 		UncommonPokedexList = new ArrayList<Pokedex>();
 		RarePokedexList = new ArrayList<Pokedex>();
 		EpicPokedexList = new ArrayList<Pokedex>();
 		LegendPokedexList = new ArrayList<Pokedex>();
 		
-		// build the list
 		for (Pokedex dex : Pokedex.values()) {
 			if (dex.getQuality() == PokemonQuality.COMMON){
 				CommonPokedexList.add(dex);
@@ -54,6 +90,18 @@ public class WildPokemonGenerator implements Serializable{
 		}
 	}
 	
+	// build the threshold list
+	private void generateEncounterThresholdList(){
+		EncounterThresholdList = new ArrayList<Double>();
+		EncounterThresholdList.add(PokemonQuality.COMMON.getEncounterRate());
+		EncounterThresholdList.add(PokemonQuality.UNCOMMON.getEncounterRate() + EncounterThresholdList.get(0));
+		EncounterThresholdList.add(PokemonQuality.RARE.getEncounterRate() + EncounterThresholdList.get(1));
+		EncounterThresholdList.add(PokemonQuality.EPIC.getEncounterRate() + EncounterThresholdList.get(2));
+		EncounterThresholdList.add(PokemonQuality.LEGENDARY.getEncounterRate() + EncounterThresholdList.get(3));
+		
+		System.out.println(EncounterThresholdList.toString());
+	}
+		
 	public Object getCommon(){
 		Random generator = new Random();
 		int randomIndex = generator.nextInt(CommonPokedexList.size());

@@ -146,6 +146,7 @@ public class RunPokemon extends JFrame {
 		}
 		currentView = newView;
 		add(currentView);
+		currentView.setVisible(true);
 		gameModel.update();
 		currentView.repaint();
 		validate();
@@ -307,6 +308,12 @@ public class RunPokemon extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String text = ((JButton) e.getSource()).getText();
 			if (text.equals("Use Item")){
+				// check if there is any row selected
+				if (inventoryTable.getSelectionModel().isSelectionEmpty()){
+					return;
+				}
+				
+				// interact with the selected row
 				int index = inventoryTable.convertRowIndexToModel(inventoryTable.getSelectedRow());
 				
 				//System.out.println("Select row: " + index);
@@ -368,9 +375,9 @@ public class RunPokemon extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent key) {
 			isPressing = true;
-			if (isPressing){
+			if (isPressing && currentView.getClass() == MainGameView.class){
 				// loop to check if the key was loose or the game is over or the timer stop
-				while (isPressing && !isOver && isActive){
+				while (isPressing && !isOver && isActive && currentView.getClass() == MainGameView.class){
 					isActive = false;
 					if (key.getKeyCode() == KeyEvent.VK_UP) {
 						gameModel.moveTrainer(Direction.NORTH);
@@ -385,6 +392,7 @@ public class RunPokemon extends JFrame {
 						gameModel.moveTrainer(Direction.EAST);
 					}
 					gameModel.setLocation(gameModel.getLocation().x, gameModel.getLocation().y);
+					
 					// update infoboard
 					updateInfoBoard();
 					// check win/lost
@@ -446,6 +454,12 @@ public class RunPokemon extends JFrame {
 					moveTimer.stop();
 					isActive = true;
 					moveCounter = 0;
+					
+					// check if encounter pokemon
+					if (gameModel.getTrainer().getCurEncounterPokemon() != null){
+						isPressing = false;
+						mainGamePanel.setVisible(false);
+					}
 				}
 			}
 
@@ -527,12 +541,20 @@ public class RunPokemon extends JFrame {
 		}
 	}
 	
+	// detect the change in view
 	public class viewChangeListener implements ComponentListener {
 
 		@Override
 		public void componentHidden(ComponentEvent e) {
 			if (e.getComponent().getClass() == BattleView.class){
 				setViewTo(mainGamePanel);
+			}
+			else if (e.getComponent().getClass() == MainGameView.class){
+				battlePanel.startBattle();
+				setViewTo(battlePanel);
+			}
+			else{
+				// TODO: 
 			}
 		}
 

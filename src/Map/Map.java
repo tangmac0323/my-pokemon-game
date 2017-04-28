@@ -1,5 +1,6 @@
 package Map;
 
+import java.awt.Point;
 import java.io.Serializable;
 
 public abstract class Map implements Serializable{
@@ -29,6 +30,8 @@ public abstract class Map implements Serializable{
 	
 	// TODO: GENERATE MAP
 	public abstract void mapGenerator();
+	
+	public abstract Map changeMap(Point portal);
 	
 	/*
 	public void printMap(){

@@ -57,8 +57,8 @@ public class BattleView extends JPanel implements Observer{
 	
 	// constructor
 	public BattleView(){
-		initData();
 		loadImages();
+		initData();
 		repaint();
 		this.addMouseListener(new ClickListener());
 	}
@@ -91,7 +91,7 @@ public class BattleView extends JPanel implements Observer{
 		}
 				
 		// get the encountered pokemon
-		curPokemon = model.getCurEncounterPokemon();
+		curPokemon = model.getTrainer().getCurEncounterPokemon();
 		
 		// calcualte and set the data for pokemon basing on the trainer data
 		double bonusRunChance = model.getTrainer().getBonusRun();
@@ -127,16 +127,21 @@ public class BattleView extends JPanel implements Observer{
 				playOpeningAnimation();
 				initData();
 			}
-			//repaint();
+			
+			repaint();
 		}
+		
 	}
 	
 	public void startBattle(){
 		battleEnd = false;
+		openingEnd = false;
 	}
 	
 	private void endBattle(){
 		battleEnd = true;
+		model.getTrainer().setCurEncounterPokemon(null);
+		model.setEncounteredThisBlock(false);
 	}
 	
 	private void playOpeningAnimation(){
@@ -158,7 +163,7 @@ public class BattleView extends JPanel implements Observer{
 				if (x >= 480 - RunButtonWidth - RunButtonWidth_OFFSET && x < 480 - RunButtonWidth_OFFSET 
 						&& y >= 320 - RunButtonHeight - RunButtonHeight_OFFSET && y < 320 - RunButtonHeight_OFFSET){
 					//System.out.println("Click on: " + x + ", " + y);
-					battleEnd = true;
+					endBattle();
 					setVisible(false);
 				}
 			}			
@@ -313,7 +318,7 @@ public class BattleView extends JPanel implements Observer{
 			return battleField.getSubimage(BattleField_Grass_OFFSET_X, BattleField_Grass_OFFSET_Y, 
 					BattleField_Width, BattleField_Height);
 		}
-		else if (gndType == GroundType.SAND){
+		else if (gndType == GroundType.SOIL){
 			return battleField.getSubimage(BattleField_Sand_OFFSET_X, BattleField_Sand_OFFSET_Y, 
 					BattleField_Width, BattleField_Height);
 		}

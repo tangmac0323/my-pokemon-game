@@ -21,18 +21,17 @@ public class GameModel extends Observable implements Serializable{
 	private int yCoords;
 	private int xPrevCoords;
 	private int yPrevCoords;
-	
-	private Pokemon curEncounterPokemon = null;
-	
+		
 	// map information
 	private Map_BottomLeft map_BL;
 	private Map_BottomRight map_BR;
 	private Map_TopLeft map_TL;
 	private Map_TopRight map_TR;
 	private Map curMap;
-	private static final int BlockPixel = 16;
-	private static final ArrayList<Double> EncounterThresholdList = new ArrayList<Double>();
-	private double encounterRate = 0.2;
+	
+	// battle information
+	private WildPokemonGenerator wildPokemonGenerator;
+	private boolean encounteredThisBlock;	// flag to check if just encounter a pokemon before move
 	
 	// game information
 	private Mission mission;
@@ -40,9 +39,12 @@ public class GameModel extends Observable implements Serializable{
 	private boolean isWin = false;
 	private boolean isLost = false;
 	
+	
 	public GameModel(){
 		initiateMap();
-		curTrainer = new Trainer("tmt");
+		wildPokemonGenerator = WildPokemonGenerator.getInstance();
+		encounteredThisBlock = false;
+		curTrainer = new Trainer("T.M.T.");
 		setLocation(65, 65);
 		xPrevCoords = 65;
 		yPrevCoords = 65;
@@ -63,15 +65,7 @@ public class GameModel extends Observable implements Serializable{
 	public void setCurMap(Map map){
 		this.curMap = map;
 	}
-	
-	public void setCurEncounterPokemon(Pokemon pokemon){
-		curEncounterPokemon = pokemon;
-	}
-	
-	public Pokemon getCurEncounterPokemon(){
-		return this.curEncounterPokemon;
-	}
-	
+		
 	public void chooseMap(int i){
 		if (i == 0){
 			curMap = map_BL;
@@ -85,6 +79,14 @@ public class GameModel extends Observable implements Serializable{
 		else{
 			curMap = map_TR;
 		}
+	}
+	
+	public boolean hasEncounteredThisBlock(){
+		return this.encounteredThisBlock;
+	}
+	
+	public void setEncounteredThisBlock(boolean b){
+		this.encounteredThisBlock = b;
 	}
 	
 	public void setMission(Mission mission){
@@ -123,19 +125,8 @@ public class GameModel extends Observable implements Serializable{
 		map_BR = new Map_BottomRight();
 		map_TL = new Map_TopLeft();
 		map_TR = new Map_TopRight();
-		generateEncounterThresholdList();
 	}	
-	
-	private void generateEncounterThresholdList(){
-		EncounterThresholdList.add(PokemonQuality.COMMON.getEncounterRate());
-		EncounterThresholdList.add(PokemonQuality.UNCOMMON.getEncounterRate() + EncounterThresholdList.get(0));
-		EncounterThresholdList.add(PokemonQuality.RARE.getEncounterRate() + EncounterThresholdList.get(1));
-		EncounterThresholdList.add(PokemonQuality.EPIC.getEncounterRate() + EncounterThresholdList.get(2));
-		EncounterThresholdList.add(PokemonQuality.LEGENDARY.getEncounterRate() + EncounterThresholdList.get(3));
 		
-		System.out.println(EncounterThresholdList.toString());
-	}
-	
 	// set the coordinate of the trainer
 	public void setLocation(int x, int y){
 		this.xPrevCoords = xCoords;
@@ -196,143 +187,42 @@ public class GameModel extends Observable implements Serializable{
 			// 		Check if it is an item
 			setLocation(xCoords, yCoords);
 		}
-		// TODO: the following two part will be added in for iterator 2
 		/*
 		// trigger the portal
-		else if (curMap.getBlock(nextX, nextY).getPassType() == PassableType.PORTAL){
+		else if (curMap.getBlock(nextX, nextY).getInteractType() == InteractType.PORTAL){
 			// count step
 			curTrainer.incrementStep(1);
-			// TODO: call the change map function
+			// TODO: call the change map function of the map
 			Point p = new Point();
 			p.setLocation(nextX, nextY);						
-			changeMap(curMap, p);
-		}	
-		
-		// encounter pokemon
-		else if (curMap.getBlock(nextX, nextY).getPassType() != PassableType.AIR){
-			// count step
-			curTrainer.incrementStep(1);
-			
-			setLocation(nextX, nextY);
-			update();
-			// call the pokemon encounter
-			pokemonEncounter();
+			curMap = curMap.changeMap(p);
 		}
 		*/		
 		else{
 			setLocation(nextX, nextY);
 			curTrainer.incrementStep(1);
-			pokemonEncounter();
+			update();
+			//pokemonEncounter();
 		}
-		
-		update();
 	}
 	
 	// Algorithm to encounter a pokemon when moving upon area that could met a pokemon
-	
 	public void pokemonEncounter(){
-		// roll the dice to see if encounter a pokemon
-		// if not encounter return with nothing
-		if (Math.random() > encounterRate){
-			return;
-		}
-		// encounter the pokemon
-		else{
-			// row the dice to see what quality of pokemon will encounter
-			double rate = Math.random();
-			
-			// encounter common
-			if (rate >= 0 && rate < EncounterThresholdList.get(0)){
-				
+		// Check if the current map block is interactType
+		if (curMap.getBlock(xCoords, yCoords).getInteractType() != InteractType.NONE){
+			// roll the dice to see if encounter a pokemon
+			// if not encounter return with nothing
+			if (Math.random() > curMap.getBlock(xCoords, yCoords).getInteractType().getBasicEncounterRate()){
+				return;
 			}
-			else if (rate >= EncounterThresholdList.get(0) && rate < EncounterThresholdList.get(1)){
-				
-			}
-			else if (rate >= EncounterThresholdList.get(1) && rate < EncounterThresholdList.get(2)){
-				
-			}
-			else if (rate >= EncounterThresholdList.get(2) && rate < EncounterThresholdList.get(3)){
-				
-			}
+			// encounter the pokemon
 			else{
-				
+				curTrainer.setCurEncounterPokemon(wildPokemonGenerator.generatePokemon());
+				this.setEncounteredThisBlock(true);
+				update();
 			}
-			
 		}
-		
-		
 	}
-
-	
-	// TODO: The following part will be done for iterator 2
-	/*
-	public void changeMap(Map map, Point portal){
-		int newX = 0;
-		int newY = 0;
-		// on map bottom left
-		if (curMap.getClass() == Map_BottomLeft.class){
-			// check portal
-			if (portal.equals(map_BL.getRightPortal())){
-				curMap = map_BR;
-				newX = (int)map_BR.getLeftPortal().getX();
-				newY = (int)map_BR.getLeftPortal().getY() + 1;
-			}
-			else{
-				curMap = map_TL;
-				newX = (int)map_TL.getBottomPortal().getX() - 1;
-				newY = (int)map_TL.getBottomPortal().getY();
-			}
-		}
-		// on map bottom right
-		else if (curMap.getClass() == Map_BottomRight.class){
-			// check portal
-			if (portal.equals(map_BR.getLeftPortal())){
-				curMap = map_BL;
-				newX = (int)map_BL.getRightPortal().getX();
-				newY = (int)map_BL.getRightPortal().getY() - 1;
-			}
-			else{
-				curMap = map_TR;
-				newX = (int)map_BR.getLeftPortal().getX() - 1;
-				newY = (int)map_BR.getLeftPortal().getY();
-			}
-		}
-		
-		// on map top right
-		else if (curMap.getClass() == Map_TopRight.class){
-			// check portal
-			if (portal.equals(map_TR.getLeftPortal())){
-				curMap = map_TL;
-				newX = (int)map_TL.getRightPortal().getX();
-				newY = (int)map_TL.getRightPortal().getY() - 1;
-			}
-			else{
-				curMap = map_BR;
-				newX = (int)map_BR.getTopPortal().getX() + 1;
-				newY = (int)map_BR.getTopPortal().getY();
-			}
-		}
-		
-		// on map top left
-		else{
-			// check portal
-			if (portal.equals(map_TL.getRightPortal())){
-				curMap = map_TR;
-				newX = (int)map_TR.getLeftPortal().getX();
-				newY = (int)map_TR.getLeftPortal().getY() + 1;
-			}
-			else{
-				curMap = map_BL;
-				newX = (int)map_BL.getTopPortal().getX() + 1;
-				newY = (int)map_BL.getTopPortal().getY();
-			}
-		}
-		
-		// reset the coordinates and notify the observer
-		this.setLocation(newX, newY);
-	}
-	
-	*/
 	
 	public void checkLost(){
 		this.isLost = mission.checkMissionFailed(curTrainer);

@@ -1,5 +1,5 @@
 package Map;
 
 public enum GroundType {
-	SAND, GRASSLAND, ROAD;
+	SOIL, GRASSLAND, ROAD;
 }

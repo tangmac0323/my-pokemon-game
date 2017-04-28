@@ -61,8 +61,8 @@ public class ModelTest {
 		assertTrue(!model.isWin());
 		assertTrue(model.isOver());
 		assertTrue(model.getStepCount() != 0);
-		assertTrue(model.getCurMap().getBlock(0, 0).getGround() == GroundType.SAND);
-		assertTrue(model.getCurMap().getBlock(0, 0).getPassType() == PassableType.AIR);
+		assertTrue(model.getCurMap().getBlock(0, 0).getGround() == GroundType.SOIL);
+		assertTrue(model.getCurMap().getBlock(0, 0).getInteractType() == InteractType.NONE);
 		assertFalse(model.getCurMap().getBlock(0, 0).isPassable());
 
 		

@@ -230,6 +230,12 @@ public class MainGameView extends JPanel implements Observer{
 			else{
 				timer.stop();
 				curLocation.setLocation(finalLocation);
+				
+				// call the pokemon encounter
+				// avoid repeat encounter and set up the encountered pokemon
+				if (!model.hasEncounteredThisBlock()){
+					model.pokemonEncounter();
+				}
 			}
 		}
 
@@ -259,16 +265,13 @@ public class MainGameView extends JPanel implements Observer{
 		centerOnMap = findCenter();
 		trainerOnMap.setLocation(trainerOnMap.x * MapBlockSize, trainerOnMap.y * MapBlockSize - 4);
 		
-		// calculate the increment
-		//startTimer();
-		//System.out.println("Current Location: " + curLocation + " Final Location" + finalLocation);
 		if (curLocation.equals(finalLocation)){
 			repaint();
 		}
 		else{
 			drawTrainerWithAnimation();
+			
 		}
-		
 	}
 	
 		
@@ -348,7 +351,7 @@ public class MainGameView extends JPanel implements Observer{
 			return groundSheet.getSubimage(Land_Grass_A_OFFSET_X, Land_Grass_A_OFFSET_Y, 
 											Tree_Small_A_Height, Tree_Small_A_Width);
 		}
-		else if (model.getCurMap().getBlock(x, y).getGround() == GroundType.SAND){
+		else if (model.getCurMap().getBlock(x, y).getGround() == GroundType.SOIL){
 			return groundSheet.getSubimage(Land_Sand_A_OFFSET_X, Land_Sand_A_OFFSET_Y, 
 					MapBlockSize, MapBlockSize);
 		}
