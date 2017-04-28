@@ -14,6 +14,12 @@ public class Map_BottomRight extends Map{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Map changeMap(Point portal) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	// TODO: we gonna use them in iterator 2
 	/*

@@ -16,14 +16,14 @@ public class Map_BottomLeft extends Map{
 			for (int j = 0; j < this.getSize(); j ++){
 				// Obstacle around the map
 				if (i == 0 || j == 0 || i == this.getSize() - 1 || j == this.getSize() - 1){
-					this.map[i][j] = new MapBlock(GroundType.SAND);
+					this.map[i][j] = new MapBlock(GroundType.SOIL);
 					this.map[i][j].setObstacle(ObstacleType.ROCK);
 				}
-				else if (Math.random() > 0.5){
+				else if (Math.random() > 0.3){
 					this.map[i][j] = new MapBlock(GroundType.GRASSLAND);
 				}
 				else{
-					this.map[i][j] = new MapBlock(GroundType.SAND);
+					this.map[i][j] = new MapBlock(GroundType.SOIL);
 				}
 			}
 		}
@@ -48,8 +48,17 @@ public class Map_BottomLeft extends Map{
 			for (int j = 55; j < this.getSize() - 55; j ++){
 				this.map[i][j].setObstacle(ObstacleType.NONE);
 			}
-		}	
-		// TODO: passable
+		}
+		
+		// TODO: passable		
+		for (int i = 0; i < this.getSize(); i ++){
+			for (int j = 0; j < this.getSize(); j ++){
+				// Obstacle around the map
+				if (map[i][j].getGround() == GroundType.SOIL && map[i][j].getObstacle() == ObstacleType.NONE){
+					map[i][j].setInteract(InteractType.SHORTGRASS);
+				}
+			}
+		}
 		
 	}
 	// TODO: we gonna use them in iterator 2
@@ -70,5 +79,11 @@ public class Map_BottomLeft extends Map{
 		this.rightPortal.setLocation(p);;
 	}
 	*/
+
+	@Override
+	public Map changeMap(Point portal) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -4,8 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import Pokemon.Pokemon;
-import Pokemon.WildPokemonGenerator;
+import Pokemon.*;
 
 public class WildPokemonGeneratorTest {
 
@@ -13,6 +12,7 @@ public class WildPokemonGeneratorTest {
 	public void test() {
 		WildPokemonGenerator pGenerator = WildPokemonGenerator.getInstance();
 		
+		/*
 		//////////////// Common ////////////////
 		System.out.println("Common:");
 		for (int i = 0; i < 10; i++){
@@ -45,6 +45,18 @@ public class WildPokemonGeneratorTest {
 		System.out.println("Legend:");
 		for (int i = 0; i < 5; i++){
 			System.out.println( "   " + i + " " + ((Pokemon) pGenerator.getLegend()).getClass().getName());
+		}
+		*/
+		
+		
+		///////////// Random /////////////////
+		System.out.println("Random:");
+		for (int i = 0; i < 100; i++){
+			Pokemon p = pGenerator.generatePokemon();
+			System.out.println( "   " + i + ". " + p.getSpecy().getName());
+			if (p.getSpecy() == Pokedex.MewTwo){
+				System.out.println("------> I FIND IT <------");
+			}
 		}
 	}
 

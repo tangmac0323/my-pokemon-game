@@ -16,8 +16,6 @@ public class Trainer implements Serializable{
 	private static final long serialVersionUID = 3185483056462008814L;
 	
 	// loggin information
-	//private final String userName;
-	//private final String passWord;
 	private final String id;
 	private final LocalDateTime birthDate;
 	
@@ -31,6 +29,7 @@ public class Trainer implements Serializable{
 	private int totalStepCount;
 	private int xCoords;
 	private int yCoords;
+	private Pokemon curEncounterPokemon = null;
 	
 	// bonus attribute
 	private int bonusTurn;	// add bonus turn for capture the pokemon
@@ -56,6 +55,14 @@ public class Trainer implements Serializable{
 	
 	public void setFaceDir(Direction dir){
 		this.faceDir = dir;
+	}
+	
+	public void setCurEncounterPokemon(Pokemon p){
+		this.curEncounterPokemon = p;
+	}
+	
+	public Pokemon getCurEncounterPokemon(){
+		return this.curEncounterPokemon;
 	}
 	
 	public void setLocation(int x, int y){

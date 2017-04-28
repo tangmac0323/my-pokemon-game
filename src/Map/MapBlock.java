@@ -16,42 +16,42 @@ public class MapBlock implements Serializable{
 
 	private static final long serialVersionUID = -4085092152859549598L;
 	
-	private final GroundType ground;
-	private ObstacleType obstacle;
-	private PassableType passType;
+	private final GroundType groundType;
+	private ObstacleType obstacleType;
+	private InteractType interactType;
 	//private final boolean passable;
 	
 	// constructor
 	public MapBlock(GroundType groundType){
-		this.ground = groundType;
-		this.obstacle = ObstacleType.NONE;
-		this.passType = PassableType.AIR;
+		this.groundType = groundType;
+		this.obstacleType = ObstacleType.NONE;
+		this.interactType = InteractType.NONE;
 	}
 	
 	// getter
 	public GroundType getGround(){
-		return this.ground;
+		return this.groundType;
 	}
 	
 	public ObstacleType getObstacle(){
-		return this.obstacle;
+		return this.obstacleType;
 	}
 	
-	public PassableType getPassType(){
-		return this.passType;
+	public InteractType getInteractType(){
+		return this.interactType;
 	}
 	
 	public void setObstacle(ObstacleType ob){
-		this.obstacle = ob;
+		this.obstacleType = ob;
+		this.interactType = InteractType.NONE;
 	}
 	
-	
-	/*
-	public void setPassable(PassableType ps){
-		this.passType = ps;
+	public void setInteract(InteractType it){
+		this.interactType = it;
+		this.obstacleType = ObstacleType.NONE;
 	}
 	
-		
+	/*	
 	public boolean canMeetPokemon(){
 		if (this.passType != PassableType.AIR && this.obstacle == ObstacleType.NONE){
 			return true;
@@ -64,7 +64,7 @@ public class MapBlock implements Serializable{
 	
 	// get passable status
 	public boolean isPassable(){
-		if (this.obstacle == ObstacleType.NONE){
+		if (this.obstacleType == ObstacleType.NONE){
 			return true;
 		}
 		else{
